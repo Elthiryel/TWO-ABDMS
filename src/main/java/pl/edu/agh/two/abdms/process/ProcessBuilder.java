@@ -1,5 +1,7 @@
 package pl.edu.agh.two.abdms.process;
 
+import java.io.File;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,8 +22,8 @@ public class ProcessBuilder {
         }
     }
     
-    private Node build(NodeConfig config) {
-        String type = config.getType();
+    private Node build(NodeConfig nodeConfig) {
+        String type = nodeConfig.getType();
         NodeFactory factory = nodeFactories.get(type);
         
         if (factory == null) {
@@ -29,8 +31,21 @@ public class ProcessBuilder {
             throw new RuntimeException(msg);
         }
         
-        return factory.build(config);
+        return factory.build(nodeConfig);
     }
+    
+    public List<Node> build(Reader input) {
+        return null;
+    }
+    
+    public List<Node> build(File file) {
+        return null;
+    }
+    
+    public void save(List<Node> process, File output) {
+        // ...
+    }
+    
 
     public List<Node> build(Iterable<NodeConfig> configs) {
         

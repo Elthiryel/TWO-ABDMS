@@ -1,9 +1,11 @@
 package pl.edu.agh.two.abdms.process;
 
-public interface NodeFactory {
+public interface NodeFactory<Config> {
     
     String[] forType();
     
-    Node build(NodeConfig node);
+    Node build(Config config);
+    
+    Class<Config> configType();
 
 }

@@ -1,25 +1,23 @@
 package pl.edu.agh.two.abdms.process;
 
-import java.util.HashMap;
-import java.util.Map;
 
 public class NodeConfig {
 
     private final String type;
     
-    private final Map<String, String> config = new HashMap<>();
+    private Object config;
 
     
     public NodeConfig(String type) {
         this.type = type;
     }
 
-    public Object get(String name) {
-        return config.get(name);
+    public Object getConfig() {
+        return config;
     }
     
-    public Object put(String name, String value) {
-        return config.put(name, value);
+    public void setConfig(Object config) {
+        this.config = config;
     }
     
     public String getType() {
