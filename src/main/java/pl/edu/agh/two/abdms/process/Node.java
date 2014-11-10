@@ -8,11 +8,11 @@ package pl.edu.agh.two.abdms.process;
 public interface Node {
 
     /**
-     * Builds ProcessNode object representing this particular node. It
+     * Builds NodeConfig object representing this particular node. It
      * involves persisting configuration.
      * 
-     * @return Created ProcessNode object
+     * @return Created NodeConfig object
      */
-    ProcessNode persist();
+    NodeConfig persist();
     
 }
