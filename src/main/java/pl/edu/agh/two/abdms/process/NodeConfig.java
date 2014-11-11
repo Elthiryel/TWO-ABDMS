@@ -16,6 +16,10 @@ public class NodeConfig {
         return config;
     }
     
+    public <T> T getConfig(Class<T> clazz) {
+        return clazz.cast(config);
+    }
+    
     public void setConfig(Object config) {
         this.config = config;
     }
