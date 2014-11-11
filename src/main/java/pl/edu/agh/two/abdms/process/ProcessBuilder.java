@@ -86,6 +86,7 @@ public class ProcessBuilder {
 				configs.add(n.persist());
 			}
 			writer.write(gson.toJson(configs));
+			writer.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
