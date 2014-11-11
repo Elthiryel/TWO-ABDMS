@@ -1,12 +1,26 @@
 package pl.edu.agh.two.abdms.process;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.Reader;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 
 public class ProcessBuilder {
     
@@ -33,17 +47,50 @@ public class ProcessBuilder {
         
         return factory.build(nodeConfig);
     }
+
+	public List<Node> build(Reader input){
+		
+		Gson gson = new Gson();
+		List<NodeConfig> cfgs = new ArrayList<>();
+		JsonParser parser = new JsonParser();
+		JsonArray array = parser.parse(input).getAsJsonArray();
+		for (int i = 0; i < array.size(); ++i) {
+			JsonObject o = array.get(i).getAsJsonObject();
+			String type = o.get("type").getAsString();
+			Class<?> clazz = nodeFactories.get(type).configType();
+			Object config = gson.fromJson(o.get("config"), clazz);
+			NodeConfig nodeConfig = new NodeConfig(type);
+			nodeConfig.setConfig(config);
+			cfgs.add(nodeConfig);
+
+		}
+
+		return build(cfgs);
+	}
     
-    public List<Node> build(Reader input) {
-        return null;
-    }
-    
-    public List<Node> build(File file) {
-        return null;
-    }
-    
-    public void save(List<Node> process, File output) {
-        // ...
+	public List<Node> build(File file) throws IOException {
+
+			try(BufferedReader reader = new BufferedReader(new FileReader(file))){
+				return build(reader);
+			}
+
+	}
+
+	public void save(List<Node> process, File output) {
+		List<NodeConfig> configs = new ArrayList<>();
+		Gson gson = new Gson();
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter(output));
+
+			for (Node n : process) {
+				configs.add(n.persist());
+			}
+			writer.write(gson.toJson(configs));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+        
+        
     }
     
 
