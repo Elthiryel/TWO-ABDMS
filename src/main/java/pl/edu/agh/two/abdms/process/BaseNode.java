@@ -2,25 +2,11 @@ package pl.edu.agh.two.abdms.process;
 
 
 /**
- * Base class to reduce boilerplate necessary to implement DataProcessor. 
- * 
- *  @author los
+ * Abstract base class for process pipeline elements. Provides default 
+ * implementation for node configuration handling.
  */
-public class AbstractProcessor<Input, Query, Output> implements
-        DataProcessor<Input, Query, Output> {
-    
-    protected DataSource<Query, Input> source;
+public abstract class BaseNode implements Node {
 
-    @Override
-    public void setSource(DataSource<Query, Input> source) {
-        this.source = source;
-    }
-
-    @Override
-    public DataSource<?, Input> getSource() {
-        return source;
-    }
-    
     /**
      * Returns type name used to persist configuration. Default implementation,
      * uses class name. Override for more user-friendly name.

@@ -12,23 +12,76 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
+import java.util.Set;
+
+import org.reflections.Reflections;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+
 public class ProcessBuilder {
+    
+    private static final String PREFIX = "pl.edu.agh.two.abdms";
 
     private final Map<String, NodeFactory> nodeFactories = new HashMap<>();
 
     public ProcessBuilder() {
-        ServiceLoader<NodeFactory> loader = ServiceLoader.load(NodeFactory.class);
+        findFactoriesByServiceLoader();
+        findByReflection();
+    }
+    
+    private void findByReflection() {
+        Reflections ref = new Reflections(PREFIX);
 
-        for (NodeFactory factory: loader) {
-            for (String type: factory.forType()) {
-                nodeFactories.put(type, factory);
+        // Classes - no factories
+        Set<Class<?>> nodeImpls = ref.getTypesAnnotatedWith(NodeType.class);
+        for (Class<?> type: nodeImpls) {
+            if (Node.class.isAssignableFrom(type)) {
+
+                NodeType metadata = type.getAnnotation(NodeType.class);
+
+                NodeFactory factory = new ReflectiveNodeFactory(
+                        metadata.name(),
+                        type, metadata.configType());
+                nodeFactories.put(metadata.name(), factory);
+            } else {
+                System.err.println("Warning: Type " + type + " annotated " +
+                        "with @NodeType, but is not a Node!");
             }
+        }
+        
+        // All the factories in project package
+        Set<Class<? extends NodeFactory>> factories = ref.getSubTypesOf(NodeFactory.class);
+        for (Class<? extends NodeFactory> type: factories) {
+            // Skip explicitly disabled factories
+            if (type.isAnnotationPresent(DisableFactory.class)) {
+                continue;
+            }
+            try {
+                Class<?>[] empty = {};
+                NodeFactory factory = type.getConstructor(empty).newInstance();
+                addFactory(factory);
+            } catch (Exception e) {
+                System.err.println("Warning: Problem while creating instance " +
+                        "of factory (class: " + type + ")");
+                e.printStackTrace(System.err);
+                System.err.println("Skipping...");
+            }
+        }
+    }
+    
+    public void addFactory(NodeFactory factory) {
+        for (String type: factory.forType()) {
+            nodeFactories.put(type, factory);
+        }
+    }
+    
+    private void findFactoriesByServiceLoader() {
+        for (NodeFactory factory: ServiceLoader.load(NodeFactory.class)) {
+            addFactory(factory);
         }
     }
 
