@@ -1,12 +1,12 @@
-package pl.edu.agh.two.abdms.data.parsing.csv;
+package pl.edu.agh.two.abdms.data.parsing.xls;
 
 import java.io.File;
 
 import pl.edu.agh.two.abdms.data.parsing.test.AbstractDataParserTest;
 
-public class CSVDataParserTest extends AbstractDataParserTest {
+public class XLSDataParserTest extends AbstractDataParserTest {
 
-	private static final String CORRECT_FILE_PATH = "src/test/java/test_data/correct_file.csv";
+	private static final String CORRECT_FILE_PATH = "src/test/java/test_data/test_data.xls";
 	
 	public void testTestFilesExist() throws Exception {
 		File f = new File(CORRECT_FILE_PATH);
@@ -17,7 +17,7 @@ public class CSVDataParserTest extends AbstractDataParserTest {
 		return f.exists() && !f.isDirectory();
 	}
 	
-	public void testParseCorrectFileWithCorrectSeparator() {
+	public void testParseCorrectFile() {
 		whenCorrectDataFileHasBeenParsed();
 		thenReceivedObjectIsNotNull();
 		thenCorrectColumnNamesHaveBeenObtained();
@@ -25,6 +25,7 @@ public class CSVDataParserTest extends AbstractDataParserTest {
 	}
 	
 	protected void whenCorrectDataFileHasBeenParsed() {
-		mAcquiredModel = new CSVDataParser().parse(CORRECT_FILE_PATH, ";");
+		mAcquiredModel = new XLSDataParser().parse(CORRECT_FILE_PATH);
 	}
+	
 }
