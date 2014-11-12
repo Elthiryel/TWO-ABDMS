@@ -1,10 +1,14 @@
 package pl.edu.agh.two.abdms.data.loader.xml;
 
+import org.apache.log4j.Logger;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import pl.edu.agh.two.abdms.data.loader.DataModel;
+import pl.edu.agh.two.abdms.data.loader.xml.XMLExtractor;
+
 import org.jdom2.Element;
 import org.jdom2.Document;
 
@@ -17,6 +21,7 @@ import java.util.Set;
 @Component
 public class XMLLoader {
 
+	
     @Autowired
     private XMLExtractor xmlExtractor;
 
@@ -34,11 +39,9 @@ public class XMLLoader {
 
             return DataModel.Create(convertSetToArray(columnNames), values);
         } catch (Exception e) {
-            //TODO: Obsluga wyjatkow.
-            e.printStackTrace();
+        	Logger.getLogger(XMLLoader.class).error("Try to specify correct file path");
+            return null;
         }
-        //TODO: Co zwracamy jak poleci wyjatek?
-        return null;
     }
 
     private String[] convertSetToArray(Set<String> columnNames) {
