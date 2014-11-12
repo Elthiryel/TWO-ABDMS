@@ -1,33 +1,52 @@
 package pl.edu.agh.two.abdms.gui.components.configurations;
 
-import pl.edu.agh.two.abdms.gui.controller.Configuration;
-import pl.edu.agh.two.abdms.gui.controller.ConfigurationsController;
-
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JList;
+import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.File;
 import java.util.List;
+
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JList;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
+import pl.edu.agh.two.abdms.gui.controller.Configuration;
+import pl.edu.agh.two.abdms.gui.controller.ConfigurationsController;
+
 
 public class ConfigurationsDialog extends JDialog {
     private final Container mainPanel;
-    JButton newConfigurationButton;
-    private JList<Configuration> configurationList = new JList<Configuration>();
-    private ConfigurationsController configurationsController = ConfigurationsController.getInstance();
+    private final JButton newConfigurationButton;
+
+    private final JList<Configuration> configurationList = new JList<>();
+    private final ConfigurationsController configurationsController = 
+            ConfigurationsController.getInstance();
 
     public ConfigurationsDialog() {
         mainPanel = this.getContentPane();
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
+        mainPanel.setLayout(new BorderLayout());
+        
         setSize(500, 500);
-        newConfigurationButton = new JButton("Add new...");
         setModal(true);
-        add(newConfigurationButton);
-        add(configurationList);
+        newConfigurationButton = new JButton("Add new...");
+        
+        configurationList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        configurationList.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                int index = e.getFirstIndex();
+                Configuration cfg = configurationList.getModel().getElementAt(index);
+            }
+        });
+        
+        add(newConfigurationButton, BorderLayout.PAGE_START);
+        add(configurationList, BorderLayout.LINE_START);
         loadConfigurationsList();
         bindListeners();
 
