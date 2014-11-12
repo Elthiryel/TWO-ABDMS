@@ -13,7 +13,7 @@ public class DataMenu extends JMenu {
 
     public DataMenu() {
         super("Data");
-        configurations = new JMenuItem("Load file");
+        configurations = new JMenuItem("Data sets");
         add(configurations);
         configurations.addActionListener(new ActionListener() {
             @Override
@@ -23,6 +23,4 @@ public class DataMenu extends JMenu {
             }
         });
     }
-
-
 }
