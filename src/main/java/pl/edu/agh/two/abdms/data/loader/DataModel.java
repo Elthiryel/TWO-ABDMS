@@ -27,7 +27,7 @@ public class DataModel {
 	}
 	
 	public String getValue(int rowId, String columnName) {
-		if (values.size() >= rowId) {
+		if (values.size() <= rowId) {
 			throw new ArrayIndexOutOfBoundsException(rowId);
 		}
 		if (!values.get(rowId).containsKey(columnName)) {
@@ -37,7 +37,7 @@ public class DataModel {
 	}
 	
 	public Map<String, String> getRow(int rowId) {
-		if (values.size() >= rowId) {
+		if (values.size() <= rowId) {
 			throw new ArrayIndexOutOfBoundsException(rowId);
 		}
 		return values.get(rowId);
