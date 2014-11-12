@@ -16,6 +16,9 @@ public class MainWindow extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         topMenu = new TopMenu();
         setJMenuBar(topMenu);
-        getContentPane().add(new GraphVisualization());
+        getContentPane().setSize(500, 500);
+        GraphVisualization graphVisualization = new GraphVisualization(topMenu.getGraphMenu());
+        graphVisualization.setSize(500, 500);
+        getContentPane().add(graphVisualization);
     }
 }
