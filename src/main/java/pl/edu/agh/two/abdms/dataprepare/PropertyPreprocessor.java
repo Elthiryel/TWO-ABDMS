@@ -15,15 +15,57 @@ class PropertyPreprocessor {
         this.propertyName = propertyName;
     }
 
-    public void replaceWholeWord(String oldValue, String newValue) {
+    public PropertyPreprocessor replaceWholeWord(String oldValue, String newValue) {
         for (Map<String, String> row : dataModel.getValues()) {
             if (row.containsKey(propertyName)) {
-                String oldPropertyValue = row.get(propertyName);
-                if (oldPropertyValue.equals(oldValue)) {
+                if (row.get(propertyName).equals(oldValue)) {
                     row.put(propertyName, newValue);
                 }
             }
         }
+        return this;
+    }
+
+    public PropertyPreprocessor replaceSubstring(String oldValue, String newValue) {
+        for (Map<String, String> row : dataModel.getValues()) {
+            if (row.containsKey(propertyName)) {
+                String oldProperty = row.get(propertyName);
+                if (oldProperty.contains(oldValue)) {
+                    row.put(propertyName, oldProperty.replaceAll(oldValue, newValue));
+                }
+            }
+        }
+        return this;
+    }
+
+    public PropertyPreprocessor substring(int start, int end) {
+        for (Map<String, String> row : dataModel.getValues()) {
+            if (row.containsKey(propertyName)) {
+                String oldProperty = row.get(propertyName);
+                int startIndex = Math.min(oldProperty.length(), start);
+                int endIndex = Math.max(oldProperty.length(), end);
+                row.put(propertyName, oldProperty.substring(startIndex, endIndex));
+            }
+        }
+        return this;
+    }
+
+    public PropertyPreprocessor upperCase() {
+        for (Map<String, String> row : dataModel.getValues()) {
+            if (row.containsKey(propertyName)) {
+                row.put(propertyName, row.get(propertyName).toUpperCase());
+            }
+        }
+        return this;
+    }
+
+    public PropertyPreprocessor lowerCase() {
+        for (Map<String, String> row : dataModel.getValues()) {
+            if (row.containsKey(propertyName)) {
+                row.put(propertyName, row.get(propertyName).toLowerCase());
+            }
+        }
+        return this;
     }
 
     public boolean allEntriesHaveProperty() {
