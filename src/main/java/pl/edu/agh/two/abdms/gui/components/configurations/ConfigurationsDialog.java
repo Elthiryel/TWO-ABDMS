@@ -1,6 +1,7 @@
 package pl.edu.agh.two.abdms.gui.components.configurations;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,9 +10,13 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JList;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -23,6 +28,7 @@ import pl.edu.agh.two.abdms.gui.controller.ConfigurationsController;
 public class ConfigurationsDialog extends JDialog {
     private final Container mainPanel;
     private final JButton newConfigurationButton;
+    private final JTable grid = new JTable();
 
     private final JList<Configuration> configurationList = new JList<>();
     private final ConfigurationsController configurationsController = 
@@ -32,7 +38,9 @@ public class ConfigurationsDialog extends JDialog {
         mainPanel = this.getContentPane();
         mainPanel.setLayout(new BorderLayout());
         
-        setSize(500, 500);
+        setTitle("Data sources");
+        
+        setSize(600, 500);
         setModal(true);
         newConfigurationButton = new JButton("Add new...");
         
@@ -45,8 +53,16 @@ public class ConfigurationsDialog extends JDialog {
             }
         });
         
-        add(newConfigurationButton, BorderLayout.PAGE_START);
-        add(configurationList, BorderLayout.LINE_START);
+        configurationList.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        JScrollPane scroll = new JScrollPane(configurationList);
+        
+        JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scroll, grid);
+        split.setDividerSize(5);
+        split.setDividerLocation(180);
+        
+        add(newConfigurationButton, BorderLayout.NORTH);
+        add(split, BorderLayout.CENTER);
+
         loadConfigurationsList();
         bindListeners();
 
