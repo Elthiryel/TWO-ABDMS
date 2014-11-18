@@ -1,7 +1,5 @@
 package pl.edu.agh.two.abdms.gui.components.menu;
 
-import pl.edu.agh.two.abdms.gui.graph.GraphMenu;
-
 import javax.swing.JMenuBar;
 
 public class TopMenu extends JMenuBar {

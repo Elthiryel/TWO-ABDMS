@@ -1,7 +1,7 @@
 package pl.edu.agh.two.abdms.gui.components;
 
 import pl.edu.agh.two.abdms.gui.components.menu.TopMenu;
-import pl.edu.agh.two.abdms.gui.graph.GraphVisualization;
+import pl.edu.agh.two.abdms.gui.components.graph.GraphVisualization;
 
 import javax.swing.JFrame;
 import java.awt.HeadlessException;

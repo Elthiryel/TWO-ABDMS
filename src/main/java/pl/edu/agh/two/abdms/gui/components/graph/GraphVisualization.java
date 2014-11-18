@@ -1,12 +1,10 @@
-package pl.edu.agh.two.abdms.gui.graph;
+package pl.edu.agh.two.abdms.gui.components.graph;
 
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
-import pl.edu.agh.two.abdms.gui.components.configurations.ConfigurationsDialog;
-import pl.edu.agh.two.abdms.gui.components.menu.TopMenu;
+import pl.edu.agh.two.abdms.gui.components.menu.GraphMenu;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
