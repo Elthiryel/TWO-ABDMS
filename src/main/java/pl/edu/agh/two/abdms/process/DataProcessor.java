@@ -12,6 +12,8 @@ package pl.edu.agh.two.abdms.process;
  * @param <Input> Type of data consumed by the processor
  * @param <Query> Type of requests consumed by the data source used
  * @param <Output> Type of data produced by the processor
+ * 
+ * @see BaseProcessor
  */
 public interface DataProcessor<Input, Query, Output> extends Node {
 

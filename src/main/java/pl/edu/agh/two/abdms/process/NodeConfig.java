@@ -13,7 +13,7 @@ package pl.edu.agh.two.abdms.process;
  * 
  * Implementation detail: currently, NodeConfig objects are serialized using
  * GSON framework. As long as GSON can automatically serialize and deserialize
- * config object, it'll work fine. 
+ * config object given information about its type, it'll work fine. 
  */
 public class NodeConfig {
 
