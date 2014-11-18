@@ -1,5 +1,6 @@
 package pl.edu.agh.two.abdms.data.loader;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -34,6 +35,17 @@ public class DataModel {
 			throw new NoSuchElementException(columnName);
 		}
 		return values.get(rowId).get(columnName);
+	}
+	
+	public String[] getValuesForColumn(String columnName) {
+		List<String> valuesList = new LinkedList<String>();
+		for (Map<String, String> valueRow : values) {
+			if (valueRow.containsKey(columnName)) {
+				valuesList.add(valueRow.get(columnName));
+			}
+		}
+		String[] valuesArray = new String[valuesList.size()];
+		return valuesList.toArray(valuesArray);
 	}
 	
 	public Map<String, String> getRow(int rowId) {
