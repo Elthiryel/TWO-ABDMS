@@ -83,7 +83,7 @@ public class GraphPanel extends JPanel {
     }
 
     public void removeElement(int elementId){
-        graph.removeCells(new Object[]{idToCellMap.get(elementId)}, true);
+        graph.removeCells(new Object[]{idToCellMap.get(elementId)});
         cellToIdMap.remove(idToCellMap.get(elementId));
         idToCellMap.remove(elementId);
     }

@@ -40,6 +40,7 @@ public class GraphController implements GraphView.GraphViewListener {
     public void removeElementsAction(List<Integer> elementsId) {
         for(Integer i: elementsId){
             try{
+                ///TODO: if element is a vertex than remove also input and output edges.
                 graphView.removeElement(i);
             }catch (Exception e){
                 e.printStackTrace();
