@@ -31,6 +31,11 @@ public class GraphController implements GraphView.GraphViewListener {
         graphView.addVertex(generateIndex(), vertextType.name());
     }
 
+    /**
+     * @param sourceVertexId
+     * @param targetVertexId
+     * @return if vertices can be connected return new edge id (>= 0). If they cannot be connected you can return -1 and than edge won't be created.
+     */
     @Override
     public int verticesConnectedEvent(int sourceVertexId, int targetVertexId) {
         return generateIndex();

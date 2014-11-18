@@ -42,6 +42,9 @@ public class GraphPanel extends JPanel {
                 mxICell source = cell.getSource();
                 try{
                     int edgeId = listener.verticesConnectedEvent(Integer.parseInt(source.getId()), Integer.parseInt(target.getId()));
+                    if (edgeId < 0) {
+                        throw new IllegalArgumentException();
+                    }
                     updateMapping(edgeId, cell);
                     cell.setId(String.valueOf(edgeId));
                 }catch (Exception e){
