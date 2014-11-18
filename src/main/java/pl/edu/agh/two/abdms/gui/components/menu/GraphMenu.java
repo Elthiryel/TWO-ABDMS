@@ -17,7 +17,5 @@ public class GraphMenu extends JMenu {
         return addProcess;
     }
 
-    public static GraphMenu getInstance() {
-        return instance;
-    }
+
 }
