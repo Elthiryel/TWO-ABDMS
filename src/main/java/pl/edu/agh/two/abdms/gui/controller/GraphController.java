@@ -2,6 +2,8 @@ package pl.edu.agh.two.abdms.gui.controller;
 
 import pl.edu.agh.two.abdms.gui.components.graph.GraphView;
 
+import java.util.List;
+
 /**
  * Created by pawel on 18/11/14.
  */
@@ -10,6 +12,8 @@ public class GraphController implements GraphView.GraphViewListener {
 
     private final GraphView graphView;
 
+    private int indexGenerator = 0;
+
     public static GraphController get(GraphView graphView){
         return new GraphController(graphView);
     }
@@ -17,28 +21,34 @@ public class GraphController implements GraphView.GraphViewListener {
     private GraphController(GraphView graphView) {
         this.graphView = graphView;
         graphView.setListener(this);
-        graphView.addVertex(0, "first");
-        graphView.addVertex(1, "second");
-        graphView.addEdge(0, 1, 0, "edge");
+        graphView.addVertex(generateIndex(), "first");
+        graphView.addVertex(generateIndex(), "second");
+        graphView.addEdge(0, 1, generateIndex(), "edge");
     }
 
     @Override
     public void addVertexAction(GraphView.VertextType vertextType) {
-
+        graphView.addVertex(generateIndex(), vertextType.name());
     }
 
     @Override
-    public void connectVerticesAction(int sourceVertexId, int targetVertexId) {
-
+    public int verticesConnectedEvent(int sourceVertexId, int targetVertexId) {
+        return generateIndex();
     }
 
     @Override
-    public void removeEdgeAction(int edgeId) {
-
+    public void removeElementsAction(List<Integer> elementsId) {
+        for(Integer i: elementsId){
+            try{
+                graphView.removeElement(i);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
     }
 
-    @Override
-    public void removeVertexAction(int vertexId) {
 
+    private int generateIndex(){
+        return indexGenerator++;
     }
 }

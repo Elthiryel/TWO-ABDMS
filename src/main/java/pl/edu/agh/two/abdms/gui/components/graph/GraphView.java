@@ -4,6 +4,7 @@ import pl.edu.agh.two.abdms.gui.components.menu.GraphMenu;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 /**
  * Created by pawel on 18/11/14.
@@ -12,18 +13,16 @@ public class GraphView {
 
 
     public static enum VertextType{
-        process
+        classification, clustering, association, preparedata
     }
 
     public static interface GraphViewListener{
 
         public void addVertexAction(VertextType vertextType);
 
-        public void connectVerticesAction(int sourceVertexId, int targetVertexId);
+        public int verticesConnectedEvent(int sourceVertexId, int targetVertexId);
 
-        public void removeEdgeAction(int edgeId);
-
-        public void removeVertexAction(int vertexId);
+        public void removeElementsAction(List<Integer> elementsId);
 
     }
 
@@ -31,13 +30,19 @@ public class GraphView {
 
     private GraphViewListener listener;
 
-    public GraphView(GraphMenu graphMenu, GraphPanel graphPanel) {
+    public GraphView(GraphMenu graphMenu, final GraphPanel graphPanel) {
         this.graphPanel = graphPanel;
-        graphMenu.getAddProcess().addActionListener(new ActionListener() {
+        graphMenu.getClassification().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                listener.addVertexAction(VertextType.process);
+                listener.addVertexAction(VertextType.classification);
 
+            }
+        });
+        graphMenu.getRemoveSelected().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                listener.removeElementsAction(graphPanel.getSelection());
             }
         });
     }
@@ -50,7 +55,12 @@ public class GraphView {
         graphPanel.addEdge(sourceVertexId, targetVertexId, edgeId, name);
     }
 
+    public void removeElement(int id) {
+        graphPanel.removeElement(id);
+    }
+
     public void setListener(GraphViewListener listener) {
         this.listener = listener;
+        graphPanel.setListener(listener);
     }
 }
