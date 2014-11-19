@@ -40,14 +40,14 @@ public class GraphPanel extends JPanel {
                 mxCell cell = (mxCell) evt.getProperty("cell");
                 mxICell target = cell.getTarget();
                 mxICell source = cell.getSource();
-                try{
+                try {
                     int edgeId = listener.verticesConnectedEvent(Integer.parseInt(source.getId()), Integer.parseInt(target.getId()));
                     if (edgeId < 0) {
                         throw new IllegalArgumentException();
                     }
                     updateMapping(edgeId, cell);
                     cell.setId(String.valueOf(edgeId));
-                }catch (Exception e){
+                } catch (Exception e) {
                     System.out.println("Can't create edge without source and target.");
                     graph.removeCells(new Object[]{cell});
                 }
@@ -74,27 +74,39 @@ public class GraphPanel extends JPanel {
         cellToIdMap.put(v1, vertexId);
     }
 
-    public void addEdge(int sourceId, int targetId, int edgeId, String name){
+    public void addEdge(int sourceId, int targetId, int edgeId, String name) {
+        Object targetCell = idToCellMap.get(targetId);
+        Object sourceCell = idToCellMap.get(sourceId);
+
+        boolean canAdd = graph.getOutgoingEdges(sourceCell).length == 0
+                && graph.getIncomingEdges(targetCell).length == 0;
+
+        if (!canAdd) {
+            System.out.println("CAN'T ADD");
+            return;
+        }
+
         graph.getModel().beginUpdate();
+
         try {
-            Object v1 =  graph.insertEdge(graph.getDefaultParent(), String.valueOf(edgeId), name,
-                    idToCellMap.get(sourceId), idToCellMap.get(targetId));
+            Object v1 = graph.insertEdge(graph.getDefaultParent(), String.valueOf(edgeId), name,
+                    sourceCell, targetCell);
             updateMapping(edgeId, v1);
         } finally {
             graph.getModel().endUpdate();
         }
     }
 
-    public void removeElement(int elementId){
+    public void removeElement(int elementId) {
         graph.removeCells(new Object[]{idToCellMap.get(elementId)});
         cellToIdMap.remove(idToCellMap.get(elementId));
         idToCellMap.remove(elementId);
     }
 
 
-    public List<Integer> getSelection(){
+    public List<Integer> getSelection() {
         List<Integer> selection = new ArrayList<Integer>();
-        for(Object o: graph.getSelectionCells()){
+        for (Object o : graph.getSelectionCells()) {
             selection.add(cellToIdMap.get(o));
         }
         return selection;

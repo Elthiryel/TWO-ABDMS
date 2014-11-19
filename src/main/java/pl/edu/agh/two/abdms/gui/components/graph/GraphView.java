@@ -12,11 +12,11 @@ import java.util.List;
 public class GraphView {
 
 
-    public static enum VertextType{
+    public static enum VertextType {
         classification, clustering, association, preparedata
     }
 
-    public static interface GraphViewListener{
+    public static interface GraphViewListener {
 
         public void addVertexAction(VertextType vertextType);
 
@@ -39,6 +39,21 @@ public class GraphView {
 
             }
         });
+
+        graphMenu.getAssociation().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                listener.addVertexAction(VertextType.association);
+            }
+        });
+
+        graphMenu.getClustering().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                listener.addVertexAction(VertextType.clustering);
+            }
+        });
+
         graphMenu.getRemoveSelected().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -47,11 +62,11 @@ public class GraphView {
         });
     }
 
-    public void addVertex(int vertexId, String name){
+    public void addVertex(int vertexId, String name) {
         graphPanel.addVertex(vertexId, name);
     }
 
-    public void addEdge(int sourceVertexId, int targetVertexId, int edgeId, String name){
+    public void addEdge(int sourceVertexId, int targetVertexId, int edgeId, String name) {
         graphPanel.addEdge(sourceVertexId, targetVertexId, edgeId, name);
     }
 
