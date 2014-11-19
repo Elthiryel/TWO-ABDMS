@@ -13,6 +13,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JList;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
@@ -20,7 +21,11 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import com.google.common.io.Files;
+
 import pl.edu.agh.two.abdms.data.loader.DataModel;
+import pl.edu.agh.two.abdms.data.loader.xml.XMLLoader;
+import pl.edu.agh.two.abdms.data.parsing.csv.CSVDataParser;
 import pl.edu.agh.two.abdms.gui.controller.Configuration;
 import pl.edu.agh.two.abdms.gui.controller.ConfigurationsController;
 
@@ -28,6 +33,9 @@ import pl.edu.agh.two.abdms.gui.controller.ConfigurationsController;
 public class ConfigurationsDialog extends JDialog {
     private final Container mainPanel;
     private final JButton newConfigurationButton;
+    private final JButton refreshButton;
+    private final JButton okButton;
+    private final JButton showStatisticsButton;
     private final JTable dataTable = new JTable();
 
     private final JList<Configuration> configurationList = new JList<>();
@@ -43,6 +51,9 @@ public class ConfigurationsDialog extends JDialog {
         setSize(600, 500);
         setModal(true);
         newConfigurationButton = new JButton("Add new...");
+        refreshButton = new JButton("Refresh");
+        showStatisticsButton = new JButton("Show Statistics");
+        okButton = new JButton("OK");
 
         configurationList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         configurationList.addListSelectionListener(new ListSelectionListener() {
@@ -61,7 +72,14 @@ public class ConfigurationsDialog extends JDialog {
         split.setDividerSize(5);
         split.setDividerLocation(180);
 
-        add(newConfigurationButton, BorderLayout.NORTH);
+        JPanel upPanel = new JPanel();
+        upPanel.add(newConfigurationButton, BorderLayout.WEST);
+        upPanel.add(refreshButton, BorderLayout.EAST);
+        upPanel.add(okButton);
+        upPanel.add(showStatisticsButton);
+        add(upPanel, BorderLayout.SOUTH);
+        //add(newConfigurationButton, BorderLayout.NORTH);
+        //add(refreshButton, BorderLayout.NORTH);
         add(split, BorderLayout.CENTER);
 
         loadConfigurationsList();
@@ -88,7 +106,16 @@ public class ConfigurationsDialog extends JDialog {
         // HERE is really not a good place to put this kind of logic.
 
         // return result of aforementioned magic.
-        throw new UnsupportedOperationException();
+    	switch(Files.getFileExtension(file.getName())){
+    	case "csv":
+    		CSVDataParser parser = new CSVDataParser();
+    		return parser.parse(file.getPath(), ";");
+    	case "xml":
+    		XMLLoader loader = new XMLLoader();
+    		return loader.load(file.getPath());
+    	default:
+    		throw new UnsupportedOperationException();
+    	}        
     }
 
     private void loadConfigurationsList() {
