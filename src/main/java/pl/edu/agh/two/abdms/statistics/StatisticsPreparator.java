@@ -147,7 +147,7 @@ public class StatisticsPreparator {
 	
 	private void createStatisticsForStringColumn(String column) {
 		// number of unique values
-		String[] columnValues = dataModel.getColumnValues();
+		String[] columnValues = dataModel.getValuesForColumn(column);
 		Set<String> valueSet = new HashSet<String>();
 		for (String columnValue : columnValues) {
 			valueSet.add(columnValue);

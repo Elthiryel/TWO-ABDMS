@@ -2,12 +2,15 @@ package pl.edu.agh.two.abdms.gui.components.configurations;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -21,13 +24,15 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import com.google.common.io.Files;
-
 import pl.edu.agh.two.abdms.data.loader.DataModel;
 import pl.edu.agh.two.abdms.data.loader.xml.XMLLoader;
 import pl.edu.agh.two.abdms.data.parsing.csv.CSVDataParser;
+import pl.edu.agh.two.abdms.data.parsing.xls.XLSDataParser;
 import pl.edu.agh.two.abdms.gui.controller.Configuration;
 import pl.edu.agh.two.abdms.gui.controller.ConfigurationsController;
+import pl.edu.agh.two.abdms.gui.statistics.StatisticsDialog;
+
+import com.google.common.io.Files;
 
 
 public class ConfigurationsDialog extends JDialog {
@@ -37,6 +42,8 @@ public class ConfigurationsDialog extends JDialog {
     private final JButton okButton;
     private final JButton showStatisticsButton;
     private final JTable dataTable = new JTable();
+    private DataModel selectedDataModel;
+    private Map<String, DataModel> loadedModels = new HashMap<>();
 
     private final JList<Configuration> configurationList = new JList<>();
     private final ConfigurationsController configurationsController = 
@@ -53,13 +60,14 @@ public class ConfigurationsDialog extends JDialog {
         newConfigurationButton = new JButton("Add new...");
         refreshButton = new JButton("Refresh");
         showStatisticsButton = new JButton("Show Statistics");
+        
         okButton = new JButton("OK");
 
         configurationList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         configurationList.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                int index = e.getFirstIndex();
+                int index = configurationList.getSelectedIndex();
                 Configuration cfg = configurationList.getModel().getElementAt(index);
                 loadData(cfg);
             }
@@ -68,7 +76,7 @@ public class ConfigurationsDialog extends JDialog {
         configurationList.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         JScrollPane scroll = new JScrollPane(configurationList);
 
-        JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scroll, dataTable);
+        JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scroll, new JScrollPane( dataTable));
         split.setDividerSize(5);
         split.setDividerLocation(180);
 
@@ -87,10 +95,19 @@ public class ConfigurationsDialog extends JDialog {
     }
 
     private void loadData(Configuration cfg) {
-        File file = cfg.getFile();
-        DataModel data = parseFile(file); 
-        DataTableModel model = new DataTableModel(data);
+    	if(!loadedModels.containsKey(cfg.getName())){
+    		File file = cfg.getFile();
+            DataModel tmpModel = parseFile(file);
+            
+            loadedModels.put(cfg.getName(), tmpModel);
+            selectedDataModel = tmpModel;
+    	}else{
+    		selectedDataModel = loadedModels.get(cfg.getName());
+    	}
+        
+        DataTableModel model = new DataTableModel(selectedDataModel);
         dataTable.setModel(model);
+       
     }
 
     private DataModel parseFile(File file) {
@@ -113,6 +130,10 @@ public class ConfigurationsDialog extends JDialog {
     	case "xml":
     		XMLLoader loader = new XMLLoader();
     		return loader.load(file.getPath());
+    	case "xls":
+    	case "xlsx":
+    		XLSDataParser xslParser = new XLSDataParser();
+    		return xslParser.parse(file.getPath());
     	default:
     		throw new UnsupportedOperationException();
     	}        
@@ -138,7 +159,20 @@ public class ConfigurationsDialog extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 NewConfigurationDialog newConfigurationDialog = new NewConfigurationDialog();
                 newConfigurationDialog.setVisible(true);
-            }
-        });
-    }
+			}
+		});
+        final boolean isOnTop = this.isAlwaysOnTop();
+		System.out.println(isOnTop);
+		showStatisticsButton.addActionListener((e) -> {
+
+			StatisticsDialog dlg = new StatisticsDialog(selectedDataModel);
+			
+			dlg.setMinimumSize(new Dimension(600, 300));
+			dlg.setModalityType(ModalityType.APPLICATION_MODAL);
+			dlg.pack();
+			dlg.setLocationRelativeTo(null);
+			dlg.setVisible(true);
+
+		});
+	}
 }

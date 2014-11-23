@@ -1,6 +1,7 @@
 package pl.edu.agh.two.abdms.gui.statistics;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
@@ -16,16 +17,12 @@ import javax.swing.SwingUtilities;
 import pl.edu.agh.two.abdms.data.loader.DataModel;
 import pl.edu.agh.two.abdms.statistics.StatisticsPreparator;
 
-public class StatisticsDialog extends JFrame {
+public class StatisticsDialog extends JDialog {
 
     private final DataModel dataModel;
     private JLabel loadingLabel;
     private BoxLayout layout;
 
-    public static void main(String[] args) {
-        StatisticsDialog dialog = new StatisticsDialog(null);
-        dialog.setVisible(true);
-    }
     
     public StatisticsDialog(DataModel dataModel) {
         this.dataModel = dataModel;

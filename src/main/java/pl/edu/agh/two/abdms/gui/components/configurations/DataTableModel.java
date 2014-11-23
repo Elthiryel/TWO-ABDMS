@@ -38,5 +38,11 @@ public class DataTableModel extends AbstractTableModel {
     public String getColumnName(int column) {
         return data.getColumnValues()[column];
     }
+    
+    @Override
+    public void setValueAt(Object value, int rowIndex, int columnIndex){
+    	String header = data.getColumnValues()[columnIndex];
+    	data.getRow(rowIndex).put(header, (String)value);
+    }
 
 }
