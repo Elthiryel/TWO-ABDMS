@@ -1,9 +1,8 @@
 package pl.edu.agh.two.abdms.gui.components.graph;
 
 import pl.edu.agh.two.abdms.gui.components.menu.GraphMenu;
+import pl.edu.agh.two.abdms.gui.exceptions.ValidationException;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 
 /**
@@ -12,54 +11,19 @@ import java.util.List;
 public class GraphView {
 
 
-    public static enum VertextType {
-        classification, clustering, association, preparedata
-    }
-
-    public static interface GraphViewListener {
-
-        public void addVertexAction(VertextType vertextType);
-
-        public int verticesConnectedEvent(int sourceVertexId, int targetVertexId);
-
-        public void removeElementsAction(List<Integer> elementsId);
-
-    }
-
     private final GraphPanel graphPanel;
 
     private GraphViewListener listener;
 
     public GraphView(GraphMenu graphMenu, final GraphPanel graphPanel) {
         this.graphPanel = graphPanel;
-        graphMenu.getClassification().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                listener.addVertexAction(VertextType.classification);
 
-            }
-        });
-
-        graphMenu.getAssociation().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                listener.addVertexAction(VertextType.association);
-            }
-        });
-
-        graphMenu.getClustering().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                listener.addVertexAction(VertextType.clustering);
-            }
-        });
-
-        graphMenu.getRemoveSelected().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                listener.removeElementsAction(graphPanel.getSelection());
-            }
-        });
+        graphMenu.getClassification().addActionListener(e -> listener.addVertexAction(VertexType.classification));
+        graphMenu.getAssociation().addActionListener(e -> listener.addVertexAction(VertexType.association));
+        graphMenu.getClustering().addActionListener(e -> listener.addVertexAction(VertexType.clustering));
+        graphMenu.getPrepareData().addActionListener(e -> listener.addVertexAction(VertexType.prepareData));
+        graphMenu.getRemoveSelected().addActionListener(e -> listener.removeElementsAction(graphPanel.getSelection()));
+        graphMenu.getBuild().addActionListener(e -> buildProcess());
     }
 
     public void addVertex(int vertexId, String name) {
@@ -77,5 +41,18 @@ public class GraphView {
     public void setListener(GraphViewListener listener) {
         this.listener = listener;
         graphPanel.setListener(listener);
+    }
+
+    private void buildProcess() {
+        try {
+            List<VertexType> processVertices = listener.getProcessVertices();
+            System.out.println("Build process here: " + processVertices);
+        } catch (ValidationException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public ProcessGraph getProcessGraph() {
+        return graphPanel;
     }
 }

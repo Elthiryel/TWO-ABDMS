@@ -4,22 +4,23 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 public class GraphMenu extends JMenu {
-
     JMenuItem classification;
     JMenuItem clustering;
     JMenuItem association;
     JMenuItem removeSelected;
     JMenuItem build;
-    private static final GraphMenu instance = new GraphMenu();
+    JMenuItem prepareData;
 
     public GraphMenu() {
         super("Graph");
         classification = new JMenuItem("Add classification step");
         association = new JMenuItem("Add association step");
         clustering = new JMenuItem("Add clustering step");
+        prepareData = new JMenuItem("Add Data preparation");
         build = new JMenuItem("Build process flow");
 
         removeSelected = new JMenuItem("Remove current selection");
+        add(prepareData);
         add(classification);
         add(clustering);
         add(association);
@@ -41,5 +42,13 @@ public class GraphMenu extends JMenu {
 
     public JMenuItem getRemoveSelected() {
         return removeSelected;
+    }
+
+    public JMenuItem getPrepareData() {
+        return prepareData;
+    }
+
+    public JMenuItem getBuild() {
+        return build;
     }
 }

@@ -1,34 +1,41 @@
 package pl.edu.agh.two.abdms.gui.controller;
 
 import pl.edu.agh.two.abdms.gui.components.graph.GraphView;
+import pl.edu.agh.two.abdms.gui.components.graph.GraphViewListener;
+import pl.edu.agh.two.abdms.gui.components.graph.VertexType;
+import pl.edu.agh.two.abdms.gui.exceptions.ValidationException;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by pawel on 18/11/14.
  */
-public class GraphController implements GraphView.GraphViewListener {
-
+public class GraphController implements GraphViewListener {
 
     private final GraphView graphView;
-
     private int indexGenerator = 0;
+    private final int startVertexId;
+    private Map<Integer, VertexType> vertices = new HashMap<>();
 
-    public static GraphController get(GraphView graphView){
+    public static GraphController get(GraphView graphView) {
         return new GraphController(graphView);
     }
 
     private GraphController(GraphView graphView) {
         this.graphView = graphView;
         graphView.setListener(this);
-        graphView.addVertex(generateIndex(), "first");
-        graphView.addVertex(generateIndex(), "second");
-        graphView.addEdge(0, 1, generateIndex(), "edge");
+
+        startVertexId = generateIndex();
+        graphView.addVertex(startVertexId, "START");
     }
 
     @Override
-    public void addVertexAction(GraphView.VertextType vertextType) {
-        graphView.addVertex(generateIndex(), vertextType.name());
+    public void addVertexAction(VertexType vertexType) {
+        int vertexId = generateIndex();
+        vertices.put(vertexId, vertexType);
+        graphView.addVertex(vertexId, vertexType.getDescription());
     }
 
     /**
@@ -42,19 +49,28 @@ public class GraphController implements GraphView.GraphViewListener {
     }
 
     @Override
-    public void removeElementsAction(List<Integer> elementsId) {
-        for(Integer i: elementsId){
-            try{
+    public void removeElementsAction(List<Integer> elementsIds) {
+        elementsIds.forEach(id -> tryRemoveElement(id));
+    }
+
+    @Override
+    public List<VertexType> getProcessVertices() throws ValidationException {
+        return new ProcessGraphExtractor(graphView.getProcessGraph(), startVertexId, vertices).getProcessVertices();
+    }
+
+    private void tryRemoveElement(Integer elementId) {
+        try {
+            if (elementId != startVertexId) {
                 ///TODO: if element is a vertex than remove also input and output edges.
-                graphView.removeElement(i);
-            }catch (Exception e){
-                e.printStackTrace();
+                graphView.removeElement(elementId);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
 
-    private int generateIndex(){
+    private int generateIndex() {
         return indexGenerator++;
     }
 }

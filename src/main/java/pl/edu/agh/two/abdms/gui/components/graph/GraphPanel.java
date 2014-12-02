@@ -8,14 +8,13 @@ import com.mxgraph.util.mxEventObject;
 import com.mxgraph.util.mxEventSource;
 import com.mxgraph.view.mxGraph;
 
-import javax.swing.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.swing.BoxLayout;
+import javax.swing.JPanel;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
-public class GraphPanel extends JPanel {
+public class GraphPanel extends JPanel implements ProcessGraph {
 
     /**
      *
@@ -25,7 +24,7 @@ public class GraphPanel extends JPanel {
     private Map<Integer, Object> idToCellMap = new HashMap<Integer, Object>();
     private Map<Object, Integer> cellToIdMap = new HashMap<Object, Integer>();
 
-    private GraphView.GraphViewListener listener;
+    private GraphViewListener listener;
 
     public GraphPanel() {
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
@@ -55,7 +54,7 @@ public class GraphPanel extends JPanel {
         });
     }
 
-    public void setListener(GraphView.GraphViewListener listener) {
+    public void setListener(GraphViewListener listener) {
         this.listener = listener;
     }
 
@@ -77,14 +76,6 @@ public class GraphPanel extends JPanel {
     public void addEdge(int sourceId, int targetId, int edgeId, String name) {
         Object targetCell = idToCellMap.get(targetId);
         Object sourceCell = idToCellMap.get(sourceId);
-
-        boolean canAdd = graph.getOutgoingEdges(sourceCell).length == 0
-                && graph.getIncomingEdges(targetCell).length == 0;
-
-        if (!canAdd) {
-            System.out.println("CAN'T ADD");
-            return;
-        }
 
         graph.getModel().beginUpdate();
 
@@ -110,5 +101,22 @@ public class GraphPanel extends JPanel {
             selection.add(cellToIdMap.get(o));
         }
         return selection;
+    }
+
+    @Override
+    public Object getVertex(int id) {
+        return idToCellMap.get(id);
+    }
+
+    @Override
+    public List<Object> getSuccessors(Object vertex) {
+        return Arrays.asList(graph.getOutgoingEdges(vertex)).stream()
+                .map(edge -> ((mxCell) edge).getTarget())
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public int idOf(Object vertex) {
+        return cellToIdMap.get(vertex);
     }
 }
