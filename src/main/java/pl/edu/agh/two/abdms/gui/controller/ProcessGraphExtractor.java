@@ -36,9 +36,20 @@ public class ProcessGraphExtractor {
     private void addSuccessorWithChildren(List<Object> successors) throws ValidationException {
         if (!successors.isEmpty()) {
             Object successor = successors.get(0);
-            VertexType successorVertex = getVertex(successor);
-            processGraph.add(successorVertex);
+            addToResultGraph(successor);
             addChildren(successor);
+        }
+    }
+
+    private void addToResultGraph(Object successor) throws ValidationException {
+        VertexType successorVertex = getVertex(successor);
+        validateSuccessorVertex(successorVertex);
+        processGraph.add(successorVertex);
+    }
+
+    private void validateSuccessorVertex(VertexType successorVertex) throws ValidationException {
+        if (processGraph.contains(successorVertex)) {
+            throw new ValidationException("Cycles in the graph are forbidden.");
         }
     }
 
@@ -55,10 +66,12 @@ public class ProcessGraphExtractor {
         return successors.stream().anyMatch(s -> s == null);
     }
 
-    private VertexType getVertex(Object vertex) {
+    private VertexType getVertex(Object vertex) throws ValidationException {
         int vertexId = graph.idOf(vertex);
         if (vertices.containsKey(vertexId)) {
             return vertices.get(vertexId);
+        } else if (startVertexId == vertexId) {
+            throw new ValidationException("START vertex can't have any incoming edges.");
         } else {
             throw new IllegalStateException("No vertex with id: " + vertexId);
         }
