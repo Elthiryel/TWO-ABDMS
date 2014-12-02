@@ -23,86 +23,73 @@ import javax.swing.JList;
 import javax.swing.JLabel;
 
 import com.sun.glass.ui.Size;
+
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JTextPane;
+
 import java.awt.GridLayout;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.border.TitledBorder;
 
-
-
+import pl.edu.agh.two.abdms.data.loader.DataModel;
+import javax.swing.JScrollPane;
+import javax.swing.border.EtchedBorder;
 
 public class ParameterEditorFrame extends JFrame {
-	private JTable patternTable;
-	private JTable substringTable;
-	private JTable valueTable;
+	private JTable dataModelTable;
 	private JTextField newValuePane;
-	
-	public ParameterEditorFrame() {
-		
+
+	public ParameterEditorFrame(DataModel dataModel) {
+		getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+
+		dataModelTable = new JTable();
+		dataModelTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		JScrollPane scrollPane = new JScrollPane(dataModelTable);
+		scrollPane.setSize(100, 20);
+		getContentPane().add(scrollPane);
+
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		getContentPane().add(tabbedPane, BorderLayout.NORTH);
-		
+		getContentPane().add(tabbedPane);
+
 		JPanel valuePanel = new JPanel();
 		tabbedPane.addTab("Change value", null, valuePanel, null);
 		valuePanel.setLayout(new BoxLayout(valuePanel, BoxLayout.Y_AXIS));
-		
-		valueTable = new JTable();
-		valueTable.setPreferredSize(new Dimension(100,100));
-		valuePanel.add(valueTable);
-		
 		JLabel labelNewLabel = new JLabel("New value");
-		valuePanel.add(labelNewLabel);
-		
 		newValuePane = new JTextField();
-		valuePanel.add(newValuePane);
 		newValuePane.setColumns(10);
-		
+		valuePanel.add(labelNewLabel);
+		valuePanel.add(newValuePane);
+
 		JPanel patternPanel = new JPanel();
-		patternPanel.setLayout(new BoxLayout(patternPanel, BoxLayout.Y_AXIS));
-		patternPanel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		tabbedPane.addTab("Change by pattern", null, patternPanel, null);
-		
+		patternPanel.setLayout(new BoxLayout(patternPanel, BoxLayout.Y_AXIS));
+		patternPanel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING,TitledBorder.TOP, null, null));
 		JLabel findLabel = new JLabel("Find what");
-		
 		JTextPane findPane = new JTextPane();
-		
 		JLabel replaceLabel = new JLabel("Replace to");
-		
 		JTextPane replacePane = new JTextPane();
-		
-		patternTable = new JTable();
-		patternTable.setPreferredSize(new Dimension(100,100));
-		patternPanel.add(patternTable);
 		patternPanel.add(findLabel);
 		patternPanel.add(findPane);
 		patternPanel.add(replaceLabel);
 		patternPanel.add(replacePane);
-		
+
 		JPanel substringPanel = new JPanel();
-		substringPanel.setLayout(new BoxLayout(substringPanel, BoxLayout.Y_AXIS));
 		tabbedPane.addTab("Substring on column", null, substringPanel, null);
-		
-		substringTable = new JTable();
-		substringTable.setPreferredSize(new Dimension(100,100));
-		substringPanel.add(substringTable);
-		
+		substringPanel.setLayout(new BoxLayout(substringPanel, BoxLayout.Y_AXIS));
 		JLabel indexFromLabel = new JLabel("Index from");
-		substringPanel.add(indexFromLabel);
-		
 		JTextPane indexFromPane = new JTextPane();
-		substringPanel.add(indexFromPane);
-		
 		JLabel indexToLabel = new JLabel("Index to");
-		substringPanel.add(indexToLabel);
-		
 		JTextPane indexToPane = new JTextPane();
+		substringPanel.add(indexFromLabel);
+		substringPanel.add(indexFromPane);
+		substringPanel.add(indexToLabel);
 		substringPanel.add(indexToPane);
-		
+
 		JButton changeButton = new JButton("Change");
-		getContentPane().add(changeButton, BorderLayout.SOUTH);
-		
-	}	
+		getContentPane().add(changeButton);
+
+	}
 }
