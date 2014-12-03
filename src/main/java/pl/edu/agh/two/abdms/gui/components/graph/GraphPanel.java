@@ -10,6 +10,9 @@ import com.mxgraph.view.mxGraph;
 
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -52,6 +55,16 @@ public class GraphPanel extends JPanel implements ProcessGraph {
                 }
             }
         });
+        graphComponent.getGraphControl().addMouseListener( new MouseAdapter() {
+ 
+        	@Override
+        	public void mousePressed(MouseEvent e) {
+        		Object cell = graphComponent.getCellAt(e.getX(), e.getY());
+        		if(cell != null && e.getClickCount() == 2 ) {
+        			listener.showConfigurationWindow(cellToIdMap.get(cell));
+        		}
+        	}
+		});
     }
 
     public void setListener(GraphViewListener listener) {

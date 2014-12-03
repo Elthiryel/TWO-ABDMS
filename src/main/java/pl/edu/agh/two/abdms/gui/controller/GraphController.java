@@ -13,6 +13,7 @@ import java.util.List;
 public class GraphController implements GraphViewListener {
 
     private final GraphView graphView;
+	private ConfigurationWindowOperner configurationWindowOpener;
 
     private ProcessesGraph processesGraph;
 
@@ -25,6 +26,7 @@ public class GraphController implements GraphViewListener {
         graphView.setListener(this);
         processesGraph = new ProcessesGraph();
         graphView.addVertex(processesGraph.getStartIndex(), "START");
+        configurationWindowOpener = new ConfigurationWindowOperner();
     }
 
     @Override
@@ -53,6 +55,12 @@ public class GraphController implements GraphViewListener {
         return processesGraph.getProcessVertices(graphView.getProcessGraph());
 
     }
+    
+
+	@Override
+	public void showConfigurationWindow(Integer vertexId) {
+		configurationWindowOpener.openWindow(vertexId, processesGraph.getVertexType(vertexId));
+	}
 
     private void tryRemoveElement(Integer elementId) {
         try {
