@@ -3,24 +3,22 @@ package pl.edu.agh.two.abdms.gui.parameter_editor;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import pl.edu.agh.two.abdms.data.loader.DataModel;
 import pl.edu.agh.two.abdms.util.ActionCommand;
+import pl.edu.agh.two.abdms.util.ProcessState;
 
-class ActionCommandComposite implements ActionCommand<DataModel, Void> {
+class ActionCommandComposite implements ActionCommand {
 
-	private final Queue<ActionCommand<DataModel, Void>> mActionCommands = new LinkedList<>();
+	private final Queue<ActionCommand> mActionCommands = new LinkedList<>();
 
-	public void addActionCommand(ActionCommand<DataModel, Void> innerCommand) {
+	public void addActionCommand(ActionCommand innerCommand) {
 		if (innerCommand == null)
 			return;
 		mActionCommands.offer(innerCommand);
 	}
 
 	@Override
-	public Void performAction(DataModel object) {
-		for (ActionCommand<DataModel, ?> action : mActionCommands) {
+	public void performAction(ProcessState object) {
+		for (ActionCommand action : mActionCommands) 
 			action.performAction(object);
-		}
-		return null;
 	}
 }

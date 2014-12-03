@@ -39,4 +39,8 @@ public class ProcessesGraph {
     public int getStartIndex() {
         return startIndex;
     }
+
+	public VertexType getVertexType(Integer vertexId) {
+		return vertices.get(vertexId);
+	}
 }
