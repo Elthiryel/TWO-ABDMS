@@ -1,5 +1,5 @@
 package pl.edu.agh.two.abdms.util;
 
-public interface ActionCommand<OperationType, ReturnType> {
-	public ReturnType performAction(OperationType object);
+public interface ActionCommand {
+	public void performAction(ProcessState object);
 }
