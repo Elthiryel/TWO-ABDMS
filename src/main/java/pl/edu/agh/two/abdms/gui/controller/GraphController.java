@@ -18,6 +18,7 @@ public class GraphController implements GraphViewListener {
     private int indexGenerator = 0;
     private final int startVertexId;
     private Map<Integer, VertexType> vertices = new HashMap<>();
+	private ConfigurationWindowOperner configurationWindowOpener;
 
     public static GraphController get(GraphView graphView) {
         return new GraphController(graphView);
@@ -26,7 +27,7 @@ public class GraphController implements GraphViewListener {
     private GraphController(GraphView graphView) {
         this.graphView = graphView;
         graphView.setListener(this);
-
+        configurationWindowOpener = new ConfigurationWindowOperner();
         startVertexId = generateIndex();
         graphView.addVertex(startVertexId, "START");
     }
@@ -57,6 +58,12 @@ public class GraphController implements GraphViewListener {
     public List<VertexType> getProcessVertices() throws ValidationException {
         return new ProcessGraphExtractor(graphView.getProcessGraph(), startVertexId, vertices).getProcessVertices();
     }
+    
+
+	@Override
+	public void showConfigurationWindow(Integer vertexId) {
+		configurationWindowOpener.openWindow(vertexId, vertices.get(vertexId));
+	}
 
     private void tryRemoveElement(Integer elementId) {
         try {
