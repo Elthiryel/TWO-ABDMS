@@ -13,9 +13,10 @@ import java.util.List;
 public class GraphController implements GraphViewListener {
 
     private final GraphView graphView;
-	private ConfigurationWindowOperner configurationWindowOpener;
 
+	private ConfigurationWindowOperner configurationWindowOpener;
     private ProcessesGraph processesGraph;
+
 
     public static GraphController get(GraphView graphView) {
         return new GraphController(graphView);
@@ -24,6 +25,7 @@ public class GraphController implements GraphViewListener {
     private GraphController(GraphView graphView) {
         this.graphView = graphView;
         graphView.setListener(this);
+
         processesGraph = new ProcessesGraph();
         graphView.addVertex(processesGraph.getStartIndex(), "START");
         configurationWindowOpener = new ConfigurationWindowOperner();
