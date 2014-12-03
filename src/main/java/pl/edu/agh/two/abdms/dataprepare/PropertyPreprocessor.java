@@ -6,7 +6,7 @@ import pl.edu.agh.two.abdms.data.loader.DataModel;
 
 import java.util.Map;
 
-class PropertyPreprocessor {
+public class PropertyPreprocessor {
     private DataModel dataModel;
     private final String propertyName;
 
