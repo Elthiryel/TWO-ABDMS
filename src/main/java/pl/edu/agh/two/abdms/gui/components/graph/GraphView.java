@@ -20,8 +20,8 @@ public class GraphView {
         this.graphPanel = graphPanel;
 
         graphMenu.getClassification().addActionListener(e -> listener.addVertexAction(VertexType.classification));
-        graphMenu.getAssociation().addActionListener(e -> listener.addVertexAction(VertexType.association));
-        graphMenu.getClustering().addActionListener(e -> listener.addVertexAction(VertexType.clustering));
+        //graphMenu.getAssociation().addActionListener(e -> listener.addVertexAction(VertexType.association));
+        //graphMenu.getClustering().addActionListener(e -> listener.addVertexAction(VertexType.clustering));
         graphMenu.getPrepareData().addActionListener(e -> listener.addVertexAction(VertexType.prepareData));
         graphMenu.getRemoveSelected().addActionListener(e -> listener.removeElementsAction(graphPanel.getSelection()));
         graphMenu.getBuild().addActionListener(e -> buildProcess());

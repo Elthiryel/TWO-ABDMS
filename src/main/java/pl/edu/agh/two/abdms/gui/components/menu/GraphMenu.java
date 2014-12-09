@@ -14,16 +14,16 @@ public class GraphMenu extends JMenu {
     public GraphMenu() {
         super("Graph");
         classification = new JMenuItem("Add classification step");
-        association = new JMenuItem("Add association step");
-        clustering = new JMenuItem("Add clustering step");
+        //association = new JMenuItem("Add association step");
+        //clustering = new JMenuItem("Add clustering step");
         prepareData = new JMenuItem("Add Data preparation");
         build = new JMenuItem("Build process flow");
 
         removeSelected = new JMenuItem("Remove current selection");
         add(prepareData);
         add(classification);
-        add(clustering);
-        add(association);
+        //add(clustering);
+        //add(association);
         add(removeSelected);
         add(build);
     }
