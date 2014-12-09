@@ -2,6 +2,7 @@ package pl.edu.agh.two.abdms.gui.controller;
 
 import pl.edu.agh.two.abdms.gui.ClassificationParameters;
 import pl.edu.agh.two.abdms.gui.ProcessParameters;
+import pl.edu.agh.two.abdms.gui.components.classification.ClassificationWindow;
 
 public class ConfigurationWindowOperner {
 
@@ -13,13 +14,13 @@ public class ConfigurationWindowOperner {
          */
 
         if (processParameters instanceof ClassificationParameters) {
-            openClassificationWindow();
+            openClassificationWindow((ClassificationParameters) processParameters);
         }
 
     }
 
-    private void openClassificationWindow() {
-
+    private void openClassificationWindow(ClassificationParameters params) {
+    	new ClassificationWindow().displayData(params);
     }
 
 }
