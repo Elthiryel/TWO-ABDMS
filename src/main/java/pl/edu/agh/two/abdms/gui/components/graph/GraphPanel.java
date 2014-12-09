@@ -55,16 +55,16 @@ public class GraphPanel extends JPanel implements ProcessGraph {
                 }
             }
         });
-        graphComponent.getGraphControl().addMouseListener( new MouseAdapter() {
- 
-        	@Override
-        	public void mousePressed(MouseEvent e) {
-        		Object cell = graphComponent.getCellAt(e.getX(), e.getY());
-        		if(cell != null && e.getClickCount() == 2 ) {
-        			listener.showConfigurationWindow(cellToIdMap.get(cell));
-        		}
-        	}
-		});
+        graphComponent.getGraphControl().addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                Object cell = graphComponent.getCellAt(e.getX(), e.getY());
+                if (cell != null && e.getClickCount() == 2) {
+                    listener.showConfigurationWindow(cellToIdMap.get(cell));
+                }
+            }
+        });
     }
 
     public void setListener(GraphViewListener listener) {

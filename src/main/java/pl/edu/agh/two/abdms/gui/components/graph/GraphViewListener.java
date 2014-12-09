@@ -12,7 +12,7 @@ public interface GraphViewListener {
 
     public void removeElementsAction(List<Integer> elementsId);
 
-    public List<VertexType> getProcessVertices() throws ValidationException;
+    public List<pl.edu.agh.two.abdms.gui.ProcessParameters> getProcessVertices() throws ValidationException;
 
 	public void showConfigurationWindow(Integer vertexId);
 }

@@ -1,5 +1,6 @@
 package pl.edu.agh.two.abdms.gui.controller;
 
+import pl.edu.agh.two.abdms.gui.ProcessParameters;
 import pl.edu.agh.two.abdms.gui.components.graph.ProcessGraph;
 import pl.edu.agh.two.abdms.gui.components.graph.VertexType;
 import pl.edu.agh.two.abdms.gui.exceptions.ValidationException;
@@ -16,19 +17,19 @@ public class ProcessesGraph {
     private final int startIndex;
     private int indexGenerator;
 
-    private Map<Integer, VertexType> vertices = new HashMap<>();
+    private Map<Integer, ProcessParameters> vertices = new HashMap<>();
 
     public ProcessesGraph() {
         startIndex = generateIndex();
     }
 
-    public List<VertexType> getProcessVertices(ProcessGraph processGraph) throws ValidationException {
+    public List<ProcessParameters> getProcessVertices(ProcessGraph processGraph) throws ValidationException {
         return new ProcessGraphExtractor(processGraph, startIndex, vertices).getProcessVertices();
     }
 
-    public int addVertex(VertexType vertexType) {
+    public int addVertex(ProcessParameters vertex) {
         int vertexId  = generateIndex();
-        vertices.put(vertexId, vertexType);
+        vertices.put(vertexId, vertex);
         return vertexId;
     }
 
@@ -40,7 +41,7 @@ public class ProcessesGraph {
         return startIndex;
     }
 
-	public VertexType getVertexType(Integer vertexId) {
+	public ProcessParameters getVertexParameters(Integer vertexId) {
 		return vertices.get(vertexId);
 	}
 }

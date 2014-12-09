@@ -33,7 +33,7 @@ public class GraphController implements GraphViewListener {
 
     @Override
     public void addVertexAction(VertexType vertexType) {
-        int vertexId = processesGraph.addVertex(vertexType);
+        int vertexId = processesGraph.addVertex(vertexType.createParametersInstance());
         graphView.addVertex(vertexId, vertexType.getDescription());
     }
 
@@ -53,7 +53,7 @@ public class GraphController implements GraphViewListener {
     }
 
     @Override
-    public List<VertexType> getProcessVertices() throws ValidationException {
+    public List<pl.edu.agh.two.abdms.gui.ProcessParameters> getProcessVertices() throws ValidationException {
         return processesGraph.getProcessVertices(graphView.getProcessGraph());
 
     }
@@ -61,7 +61,7 @@ public class GraphController implements GraphViewListener {
 
 	@Override
 	public void showConfigurationWindow(Integer vertexId) {
-		configurationWindowOpener.openWindow(vertexId, processesGraph.getVertexType(vertexId));
+		configurationWindowOpener.openWindow(vertexId, processesGraph.getVertexParameters(vertexId));
 	}
 
     private void tryRemoveElement(Integer elementId) {
