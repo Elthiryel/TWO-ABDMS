@@ -11,7 +11,7 @@ public interface ProcessParametersView<T extends ProcessParameters> {
 
     }
 
-    public void setEventListener(EventListener listener);
+    public void setEventListener(EventListener<T> listener);
 
     public void displayData(T dto);
 
