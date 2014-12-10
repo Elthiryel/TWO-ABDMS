@@ -54,38 +54,33 @@ public class ParameterEditorFrame extends JFrame {
 		patternPanel.setLayout(new GridLayout(4,1));
 		patternPanel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING,
 				TitledBorder.TOP, null, null));
-		JLabel findLabel = new JLabel("Find what");
-		JTextPane findPane = new JTextPane();
-		JLabel replaceLabel = new JLabel("Replace to");
-		JTextPane replacePane = new JTextPane();
-		JScrollPane scrollPaneOfFindPane = new JScrollPane(findPane);
-	    JScrollPane scrollPaneOfReplacePane = new JScrollPane(replacePane);
+		JLabel findWhatOfPatternLabel = new JLabel("Find what");
+		JTextPane findWhatPatternPane = new JTextPane();
+		JLabel ReplaceToOfPatternLabel = new JLabel("Replace to");
+		JTextPane replaceToPatternPane = new JTextPane();
+		JScrollPane scrollPaneOfFindOfPatternPane = new JScrollPane(findWhatPatternPane);
+	    JScrollPane scrollPaneOfReplaceofPatternPane = new JScrollPane(replaceToPatternPane);
 		
-		patternPanel.add(findLabel);
-		patternPanel.add(scrollPaneOfFindPane);
-		//patternPanel.add(findPane);
-		patternPanel.add(replaceLabel);
-		patternPanel.add(scrollPaneOfReplacePane);
-		//patternPanel.add(replacePane);
+		patternPanel.add(findWhatOfPatternLabel);
+		patternPanel.add(scrollPaneOfFindOfPatternPane);
+		patternPanel.add(ReplaceToOfPatternLabel);
+		patternPanel.add(scrollPaneOfReplaceofPatternPane);
 
 		JPanel substringPanel = new JPanel();
 		tabbedPane.addTab("Substring on column", null, substringPanel, null);
 		substringPanel.setLayout(new GridLayout(4,1));
-		JLabel indexFromLabel = new JLabel("Find what");
-		JTextPane indexFromPane = new JTextPane();
-		indexFromPane.setMaximumSize(new Dimension(10, 10));
-		JLabel indexToLabel = new JLabel("Replace to");
-		JTextPane indexToPane = new JTextPane();
-	    JScrollPane scrollPaneOfIndexToPane = new JScrollPane(indexToPane);
-	    JScrollPane scrollPaneOfIndexFromPane = new JScrollPane(indexFromPane);
+		JLabel findWhatSubstringLabel = new JLabel("Find what");
+		JTextPane findWhatSubstringPane = new JTextPane();
+		JLabel replaceToSubstringLabel = new JLabel("Replace to");
+		JTextPane replaceToSubstringPane = new JTextPane();
+	    JScrollPane scrollPaneOfFindWhatOfSubstringPane = new JScrollPane(findWhatSubstringPane);
+	    JScrollPane scrollPaneOfReplaceToOfSubstringPane = new JScrollPane(replaceToSubstringPane);
 		
 		
-		substringPanel.add(indexFromLabel);
-		substringPanel.add(scrollPaneOfIndexFromPane);
-		//substringPanel.add(indexFromPane);
-		substringPanel.add(indexToLabel);
-		substringPanel.add(scrollPaneOfIndexToPane);
-		//substringPanel.add(indexToPane);
+		substringPanel.add(findWhatSubstringLabel);
+		substringPanel.add(scrollPaneOfFindWhatOfSubstringPane);
+		substringPanel.add(replaceToSubstringLabel);
+		substringPanel.add(scrollPaneOfReplaceToOfSubstringPane);
 	
 		
 		JButton changeButton = new JButton("Change");
