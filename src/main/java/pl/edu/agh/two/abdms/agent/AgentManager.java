@@ -16,5 +16,4 @@ public class AgentManager {
         ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
         dataPreprocessorAgent.send(msg);
     }
-
 }
