@@ -70,6 +70,8 @@ public class ConfigurationsDialog extends JDialog {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 int index = configurationList.getSelectedIndex();
+                if (index < 0)
+                	return;
                 Configuration cfg = configurationList.getModel().getElementAt(index);
                 loadData(cfg);
             }
@@ -109,7 +111,6 @@ public class ConfigurationsDialog extends JDialog {
         
         DataTableModel model = new DataTableModel(selectedDataModel);
         dataTable.setModel(model);
-       
     }
 
     private DataModel parseFile(File file) {
