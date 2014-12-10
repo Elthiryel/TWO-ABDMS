@@ -31,6 +31,8 @@ import pl.edu.agh.two.abdms.data.parsing.xls.XLSDataParser;
 import pl.edu.agh.two.abdms.gui.controller.Configuration;
 import pl.edu.agh.two.abdms.gui.controller.ConfigurationsController;
 import pl.edu.agh.two.abdms.gui.statistics.StatisticsDialog;
+import pl.edu.agh.two.applicationdata.ApplicationData;
+import pl.edu.agh.two.applicationdata.ConfigurationData;
 
 import com.google.common.io.Files;
 
@@ -159,6 +161,18 @@ public class ConfigurationsDialog extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 NewConfigurationDialog newConfigurationDialog = new NewConfigurationDialog();
                 newConfigurationDialog.setVisible(true);
+			}
+		});
+        okButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (configurationList.isSelectionEmpty()) {
+					return;
+				}
+				ConfigurationData newConfiguration = 
+						new ConfigurationData(selectedDataModel, configurationList.getSelectedValue().getName());
+				ConfigurationsDialog.this.dispose();
+				ApplicationData.setCurrentDataConfiguration(newConfiguration);
 			}
 		});
         final boolean isOnTop = this.isAlwaysOnTop();
