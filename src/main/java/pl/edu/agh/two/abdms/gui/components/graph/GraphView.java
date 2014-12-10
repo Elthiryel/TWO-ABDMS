@@ -1,5 +1,6 @@
 package pl.edu.agh.two.abdms.gui.components.graph;
 
+import pl.edu.agh.two.abdms.gui.ProcessParameters;
 import pl.edu.agh.two.abdms.gui.components.common.MessageDialog;
 import pl.edu.agh.two.abdms.gui.components.menu.GraphMenu;
 import pl.edu.agh.two.abdms.gui.exceptions.ValidationException;
@@ -20,8 +21,8 @@ public class GraphView {
         this.graphPanel = graphPanel;
 
         graphMenu.getClassification().addActionListener(e -> listener.addVertexAction(VertexType.classification));
-        graphMenu.getAssociation().addActionListener(e -> listener.addVertexAction(VertexType.association));
-        graphMenu.getClustering().addActionListener(e -> listener.addVertexAction(VertexType.clustering));
+        //graphMenu.getAssociation().addActionListener(e -> listener.addVertexAction(VertexType.association));
+        //graphMenu.getClustering().addActionListener(e -> listener.addVertexAction(VertexType.clustering));
         graphMenu.getPrepareData().addActionListener(e -> listener.addVertexAction(VertexType.prepareData));
         graphMenu.getRemoveSelected().addActionListener(e -> listener.removeElementsAction(graphPanel.getSelection()));
         graphMenu.getBuild().addActionListener(e -> buildProcess());
@@ -46,7 +47,7 @@ public class GraphView {
 
     private void buildProcess() {
         try {
-            List<VertexType> processVertices = listener.getProcessVertices();
+            List<ProcessParameters> processVertices = listener.getProcessVertices();
             System.out.println("Build process here: " + processVertices);
         } catch (ValidationException e) {
             MessageDialog.error(e.getMessage());

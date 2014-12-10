@@ -1,7 +1,7 @@
 package pl.edu.agh.two.abdms.gui.controller;
 
+import pl.edu.agh.two.abdms.gui.ProcessParameters;
 import pl.edu.agh.two.abdms.gui.components.graph.ProcessGraph;
-import pl.edu.agh.two.abdms.gui.components.graph.VertexType;
 import pl.edu.agh.two.abdms.gui.exceptions.ValidationException;
 
 import java.util.LinkedList;
@@ -11,17 +11,17 @@ import java.util.Map;
 public class ProcessGraphExtractor {
     private ProcessGraph graph;
     private final int startVertexId;
-    private Map<Integer, VertexType> vertices;
+    private Map<Integer, ProcessParameters> vertices;
 
-    private List<VertexType> processGraph = new LinkedList<>();
+    private List<ProcessParameters> processGraph = new LinkedList<>();
 
-    public ProcessGraphExtractor(ProcessGraph graph, int startVertexId, Map<Integer, VertexType> vertices) {
+    public ProcessGraphExtractor(ProcessGraph graph, int startVertexId, Map<Integer, ProcessParameters> vertices) {
         this.graph = graph;
         this.startVertexId = startVertexId;
         this.vertices = vertices;
     }
 
-    public List<VertexType> getProcessVertices() throws ValidationException {
+    public List<ProcessParameters> getProcessVertices() throws ValidationException {
         Object startVertex = graph.getVertex(startVertexId);
         addChildren(startVertex);
         return processGraph;
@@ -42,12 +42,12 @@ public class ProcessGraphExtractor {
     }
 
     private void addToResultGraph(Object successor) throws ValidationException {
-        VertexType successorVertex = getVertex(successor);
+        ProcessParameters successorVertex = getVertex(successor);
         validateSuccessorVertex(successorVertex);
         processGraph.add(successorVertex);
     }
 
-    private void validateSuccessorVertex(VertexType successorVertex) throws ValidationException {
+    private void validateSuccessorVertex(ProcessParameters successorVertex) throws ValidationException {
         if (processGraph.contains(successorVertex)) {
             throw new ValidationException("Cycles in the graph are forbidden.");
         }
@@ -66,7 +66,7 @@ public class ProcessGraphExtractor {
         return successors.stream().anyMatch(s -> s == null);
     }
 
-    private VertexType getVertex(Object vertex) throws ValidationException {
+    private ProcessParameters getVertex(Object vertex) throws ValidationException {
         int vertexId = graph.idOf(vertex);
         if (vertices.containsKey(vertexId)) {
             return vertices.get(vertexId);
