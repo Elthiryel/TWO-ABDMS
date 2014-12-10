@@ -1,5 +1,6 @@
 package pl.edu.agh.two.abdms.gui.components.classification;
 
+
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -122,7 +123,6 @@ public class ClassificationWindow extends JFrame implements ProcessParametersVie
 		listModel.addElement("1st col");
 		listModel.addElement("2nd col");
 		listModel.addElement("3rd col");
-		setVisible(true);
 	}
 
 }
