@@ -25,6 +25,7 @@ public class NewConfigurationDialog extends JDialog {
     private Container mainPanel;
 
     public NewConfigurationDialog() {
+    	this.setTitle("New configuration");
         mainPanel = this.getContentPane();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
         uploadFileButton = new JButton("Select file");

@@ -179,9 +179,11 @@ public class ConfigurationsDialog extends JDialog {
         final boolean isOnTop = this.isAlwaysOnTop();
 		System.out.println(isOnTop);
 		showStatisticsButton.addActionListener((e) -> {
-
 			StatisticsDialog dlg = new StatisticsDialog(selectedDataModel);
 			
+			if (selectedDataModel == null)
+				return;
+
 			dlg.setMinimumSize(new Dimension(600, 300));
 			dlg.setModalityType(ModalityType.APPLICATION_MODAL);
 			dlg.pack();
