@@ -1,5 +1,11 @@
 package pl.edu.agh.two.abdms.gui.parameter_editor;
 
+import java.awt.Dimension;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+
+import javafx.geometry.Dimension2D;
+
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -13,6 +19,8 @@ import javax.swing.JTextPane;
 import javax.swing.border.TitledBorder;
 
 import pl.edu.agh.two.abdms.data.loader.DataModel;
+import javax.swing.SwingConstants;
+import java.awt.Component;
 
 public class ParameterEditorFrame extends JFrame {
 	private JTable dataModelTable;
@@ -34,7 +42,7 @@ public class ParameterEditorFrame extends JFrame {
 
 		JPanel valuePanel = new JPanel();
 		tabbedPane.addTab("Change value", null, valuePanel, null);
-		valuePanel.setLayout(new BoxLayout(valuePanel, BoxLayout.Y_AXIS));
+		valuePanel.setLayout(new GridBagLayout());
 		JLabel labelNewLabel = new JLabel("New value");
 		newValuePane = new JTextField();
 		newValuePane.setColumns(10);
@@ -43,31 +51,42 @@ public class ParameterEditorFrame extends JFrame {
 
 		JPanel patternPanel = new JPanel();
 		tabbedPane.addTab("Change by pattern", null, patternPanel, null);
-		patternPanel.setLayout(new BoxLayout(patternPanel, BoxLayout.Y_AXIS));
+		patternPanel.setLayout(new GridLayout(4,1));
 		patternPanel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING,
 				TitledBorder.TOP, null, null));
 		JLabel findLabel = new JLabel("Find what");
 		JTextPane findPane = new JTextPane();
 		JLabel replaceLabel = new JLabel("Replace to");
 		JTextPane replacePane = new JTextPane();
+		JScrollPane scrollPaneOfFindPane = new JScrollPane(findPane);
+	    JScrollPane scrollPaneOfReplacePane = new JScrollPane(replacePane);
+		
 		patternPanel.add(findLabel);
-		patternPanel.add(findPane);
+		patternPanel.add(scrollPaneOfFindPane);
+		//patternPanel.add(findPane);
 		patternPanel.add(replaceLabel);
-		patternPanel.add(replacePane);
+		patternPanel.add(scrollPaneOfReplacePane);
+		//patternPanel.add(replacePane);
 
 		JPanel substringPanel = new JPanel();
 		tabbedPane.addTab("Substring on column", null, substringPanel, null);
-		substringPanel
-				.setLayout(new BoxLayout(substringPanel, BoxLayout.Y_AXIS));
+		substringPanel.setLayout(new GridLayout(4,1));
 		JLabel indexFromLabel = new JLabel("Index from");
 		JTextPane indexFromPane = new JTextPane();
+		indexFromPane.setMaximumSize(new Dimension(10, 10));
 		JLabel indexToLabel = new JLabel("Index to");
 		JTextPane indexToPane = new JTextPane();
+	    JScrollPane scrollPaneOfIndexToPane = new JScrollPane(indexToPane);
+	    JScrollPane scrollPaneOfIndexFromPane = new JScrollPane(indexFromPane);
+		
+		
 		substringPanel.add(indexFromLabel);
-		substringPanel.add(indexFromPane);
+		substringPanel.add(scrollPaneOfIndexFromPane);
+		//substringPanel.add(indexFromPane);
 		substringPanel.add(indexToLabel);
-		substringPanel.add(indexToPane);
-
+		substringPanel.add(scrollPaneOfIndexToPane);
+		//substringPanel.add(indexToPane);
+	
 		
 		JButton changeButton = new JButton("Change");
 		getContentPane().add(changeButton);
