@@ -71,10 +71,10 @@ public class ParameterEditorFrame extends JFrame {
 		JPanel substringPanel = new JPanel();
 		tabbedPane.addTab("Substring on column", null, substringPanel, null);
 		substringPanel.setLayout(new GridLayout(4,1));
-		JLabel indexFromLabel = new JLabel("Index from");
+		JLabel indexFromLabel = new JLabel("Find what");
 		JTextPane indexFromPane = new JTextPane();
 		indexFromPane.setMaximumSize(new Dimension(10, 10));
-		JLabel indexToLabel = new JLabel("Index to");
+		JLabel indexToLabel = new JLabel("Replace to");
 		JTextPane indexToPane = new JTextPane();
 	    JScrollPane scrollPaneOfIndexToPane = new JScrollPane(indexToPane);
 	    JScrollPane scrollPaneOfIndexFromPane = new JScrollPane(indexFromPane);
