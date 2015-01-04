@@ -1,5 +1,6 @@
 package pl.edu.agh.two.abdms.gui.components.menu;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -32,7 +33,9 @@ public class DataMenu extends JMenu {
 					@Override
 					public void windowClosed(WindowEvent arg0) {
 						String configName = ApplicationData.getCurrentDataConfiguration().getConfigurationName();
-						propertyTextBoxControllers.get(PropertyTextBoxController.DATA_CONFIG).setText(configName);
+						PropertyTextBoxController controller = propertyTextBoxControllers.get(PropertyTextBoxController.DATA_CONFIG);
+						controller.setText(configName);
+						controller.setDisabledTextColor(Color.BLACK);
 					}
                 });
             }

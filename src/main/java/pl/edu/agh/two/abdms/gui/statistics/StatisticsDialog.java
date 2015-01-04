@@ -25,6 +25,7 @@ public class StatisticsDialog extends JDialog {
 
     
     public StatisticsDialog(DataModel dataModel) {
+    	this.setTitle("Statistics");
         this.dataModel = dataModel;
         initializeGui();
     }

@@ -1,5 +1,7 @@
 package pl.edu.agh.two.abdms.gui.components;
 
+import java.awt.Color;
+
 import javax.swing.JTextField;
 
 public class PropertyTextBoxController {
@@ -14,6 +16,10 @@ public class PropertyTextBoxController {
 	
 	public void setText(String text) {
 		textBox.setText(text);
+	}
+	
+	public void setDisabledTextColor(Color color) {
+		textBox.setDisabledTextColor(color);
 	}
 	
 }
