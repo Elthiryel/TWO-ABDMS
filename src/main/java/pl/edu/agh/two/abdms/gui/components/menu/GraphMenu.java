@@ -10,6 +10,7 @@ public class GraphMenu extends JMenu {
     JMenuItem removeSelected;
     JMenuItem build;
     JMenuItem prepareData;
+    JMenuItem runProcess;
 
     public GraphMenu() {
         super("Graph");
@@ -18,6 +19,7 @@ public class GraphMenu extends JMenu {
         //clustering = new JMenuItem("Add clustering step");
         prepareData = new JMenuItem("Add Data preparation");
         build = new JMenuItem("Build process flow");
+        runProcess = new JMenuItem("Run process");
 
         removeSelected = new JMenuItem("Remove current selection");
         add(prepareData);
@@ -26,6 +28,7 @@ public class GraphMenu extends JMenu {
         //add(association);
         add(removeSelected);
         add(build);
+        add(runProcess);
     }
 
     public JMenuItem getClassification() {
@@ -50,5 +53,9 @@ public class GraphMenu extends JMenu {
 
     public JMenuItem getBuild() {
         return build;
+    }
+
+    public JMenuItem getRunProcess() {
+        return runProcess;
     }
 }

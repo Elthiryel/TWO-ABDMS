@@ -55,7 +55,8 @@ public class MainWindow extends JFrame {
     	currentConfigurationLabel = new JLabel("Data config name ");
     	currentConfigurationTextBox = new JTextField("");
     	currentConfigurationTextBox.setEnabled(false);
-    	currentConfigurationTextBox.setDisabledTextColor(Color.BLACK);
+    	currentConfigurationTextBox.setDisabledTextColor(Color.RED);
+    	currentConfigurationTextBox.setText("<not selected>");
     	informationPanel.setLayout(new BoxLayout(informationPanel, BoxLayout.Y_AXIS));
     	currentConfigurationPanel = new JPanel();
     	currentConfigurationPanel.setLayout(new BoxLayout(currentConfigurationPanel, BoxLayout.X_AXIS));
