@@ -30,8 +30,8 @@ public class ParameterEditorFrame extends JFrame {
 	private JTextField newValuePane;
 	private JTextPane findPane;
 	private JTextPane replacePane;
-	private JTextPane indexFromPane;
-	private JTextPane indexToPane;
+	private JTextPane findWhatSubstringPane;
+	private JTextPane replaceToSubstringPane;
 	private JTabbedPane tabbedPane;
 	private OnActionCommandReceivedListener mCommandReceivedListener = new EmptyActionCommandListener();
 	
@@ -83,9 +83,9 @@ public class ParameterEditorFrame extends JFrame {
 		tabbedPane.addTab("Substring on column", null, substringPanel, null);
 		substringPanel.setLayout(new GridLayout(4,1));
 		JLabel findWhatSubstringLabel = new JLabel("Find what");
-		JTextPane findWhatSubstringPane = new JTextPane();
+		findWhatSubstringPane = new JTextPane();
 		JLabel replaceToSubstringLabel = new JLabel("Replace to");
-		JTextPane replaceToSubstringPane = new JTextPane();
+		replaceToSubstringPane = new JTextPane();
 	    JScrollPane scrollPaneOfFindWhatOfSubstringPane = new JScrollPane(findWhatSubstringPane);
 	    JScrollPane scrollPaneOfReplaceToOfSubstringPane = new JScrollPane(replaceToSubstringPane);
 		
@@ -122,22 +122,22 @@ public class ParameterEditorFrame extends JFrame {
 			
 			String primaryModificationValue = null;
 			String secondaryModificationValue = null;
-			SelectedOperationType operationType = null;
+			DataPrepareOperationType operationType = null;
 			
 			switch(tabbedPane.getSelectedIndex()) {
 			case 0:
-				operationType = SelectedOperationType.CHANGE_VALUE;
+				operationType = DataPrepareOperationType.CHANGE_PARTICULAR_VALUE;
 				primaryModificationValue = newValuePane.getText();
 				break;
 			case 1:
-				operationType = SelectedOperationType.CHANGE_PATTERN;
+				operationType = DataPrepareOperationType.CHANGE_BY_EQUAL_STRING;
 				primaryModificationValue = findPane.getText();
 				secondaryModificationValue = replacePane.getText();
 				break;
 			case 2:
-				operationType = SelectedOperationType.SUBSTRING_ON_COLUMN;
-				primaryModificationValue = indexFromPane.getText();
-				secondaryModificationValue = indexToPane.getText();
+				operationType = DataPrepareOperationType.CHANGE_BY_CONTAINING_STRING;
+				primaryModificationValue = findWhatSubstringPane.getText();
+				secondaryModificationValue = replaceToSubstringPane.getText();
 				break;
 			}
 			
@@ -155,11 +155,11 @@ public class ParameterEditorFrame extends JFrame {
 		
 		private final int mRow;
 		private final String mColumnName;
-		private final SelectedOperationType mOperationType;
+		private final DataPrepareOperationType mOperationType;
 		private final String mPrimaryValue;
 		private final String mSecondaryValue;
 		
-		public ReturnActionCommand(int row, String columnName, SelectedOperationType operationType, 
+		public ReturnActionCommand(int row, String columnName, DataPrepareOperationType operationType, 
 				String primaryValue, String secondaryValue) {
 			
 			mRow = row;
@@ -174,51 +174,6 @@ public class ParameterEditorFrame extends JFrame {
 			mOperationType.performOperation(object.getDataModel(), mRow,
 					mColumnName, mPrimaryValue, mSecondaryValue);
 		}
-	}
-	
-	private enum SelectedOperationType {
-		CHANGE_VALUE {
-			@Override
-			void performOperation(DataModel dataModel, int row, String columnName,
-					String primaryValue, String secondaryValue) {
-				
-				if (row < 0 || dataModel == null)
-					return;
-				
-				Map<String, String> valuesMap = dataModel.getRow(row);
-				
-				if (valuesMap == null)
-					return;
-				
-				valuesMap.put(columnName, primaryValue);
-				
-			}
-		}, CHANGE_PATTERN {
-			@Override
-			void performOperation(DataModel dataModel, int row, String columnName,
-					String primaryValue, String secondaryValue) {
-				
-				for (Map<String, String> rowMap : dataModel.getValues()) {
-					for (String k : rowMap.keySet()) {
-						if (!rowMap.get(k).equals(primaryValue))
-							continue;
-						
-						rowMap.put(k, secondaryValue);
-					}
-				}
-			}
-		}, SUBSTRING_ON_COLUMN {
-			@Override
-			void performOperation(DataModel dataModel, int row, String columnName,
-					String primaryValue, String secondaryValue) {
-				
-				//TODO: implement
-				throw new UnsupportedOperationException("Not implemented");
-			}
-		};
-		
-		abstract void performOperation(DataModel dataModel, int row, 
-				String columnName, String primaryValue, String secondaryValue);
 	}
 	
 	private static final class EmptyActionCommandListener implements OnActionCommandReceivedListener {
