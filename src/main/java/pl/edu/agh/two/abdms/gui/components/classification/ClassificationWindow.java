@@ -1,11 +1,12 @@
 package pl.edu.agh.two.abdms.gui.components.classification;
 
-
+import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Stream;
 
 import javax.swing.*;
 
@@ -23,7 +24,7 @@ public class ClassificationWindow extends JFrame implements ProcessParametersVie
 	private JTextField learningDataScopeTextField;
 	private JList<String> classColumnList;
 	private ClassificationParameters params;
-
+	
 	public ClassificationWindow() {
 		initComponents();
 		setProperties();
@@ -43,14 +44,18 @@ public class ClassificationWindow extends JFrame implements ProcessParametersVie
 	private void setProperties() {
 		setVisible(false);
 		getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
-		neighboursAmountTextField.setColumns(15);
-		learningDataScopeTextField.setColumns(15);
 		setSize(300, 300);
 		setLocationRelativeTo(null);
+		neighboursAmountTextField.setColumns(15);
+		neighboursAmountTextField.setInputVerifier(new NeighboursAmountInputVerifier());
+		learningDataScopeTextField.setColumns(15);
+		learningDataScopeTextField.setInputVerifier(new LearningDataScopeInputVerifier());
 		columnList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		columnList.setLayoutOrientation(JList.VERTICAL);
+		columnList.setInputVerifier(new ClassificationColumnsInputVerifier("Columns"));
 		classColumnList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		classColumnList.setLayoutOrientation(JList.VERTICAL);
+		classColumnList.setInputVerifier(new ClassificationColumnsInputVerifier("Class column"));
 	}
 
 	private void addComponents() {
@@ -66,39 +71,29 @@ public class ClassificationWindow extends JFrame implements ProcessParametersVie
 	}
 
 	private Component wrapWithLabel(Component componentToWrap, String caption) {
-		JPanel panel = new JPanel(new FlowLayout());
+		JPanel panel = new JPanel(new BorderLayout());
 		JLabel label = new JLabel(caption);
-		panel.add(label);
-		panel.add(componentToWrap);
+		panel.add(label, BorderLayout.NORTH);
+		panel.add(componentToWrap, BorderLayout.CENTER);
 		return panel;
 	}
 
 	private void setListeners() {
-		applyButton.addActionListener( new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				try{
-					Integer neighbourAmount = Integer.valueOf(neighboursAmountTextField.getText());
-					Double learningDataScope = Double.valueOf(learningDataScopeTextField.getText());
-					List<String> selectedColumns = columnList.getSelectedValuesList();
-					String classColumn = classColumnList.getSelectedValue();
-					params.setChoosenColumns(selectedColumns);
-					params.setClassColumn(classColumn);
-					params.setLearningDataScope(learningDataScope);
-					params.setNeighboursAmount(neighbourAmount);
-				}catch(NumberFormatException e){
-					recoverError(e.getMessage());
-				}
-			}
+		applyButton.addActionListener(e -> {
+			setValues();
 		});
-				
-		
+
 	}
 	
-	private void recoverError(String msg) {
-		JOptionPane.showMessageDialog(this, msg,
-				  "Error", JOptionPane.ERROR_MESSAGE);
+	private void setValues() {
+		Integer neighbourAmount = Integer.valueOf(neighboursAmountTextField.getText());
+		Double learningDataScope = Double.valueOf(learningDataScopeTextField.getText());
+		List<String> selectedColumns = columnList.getSelectedValuesList();
+		String classColumn = classColumnList.getSelectedValue();
+		params.setChoosenColumns(selectedColumns);
+		params.setClassColumn(classColumn);
+		params.setLearningDataScope(learningDataScope);
+		params.setNeighboursAmount(neighbourAmount);
 	}
 	
 	@Override
@@ -123,6 +118,7 @@ public class ClassificationWindow extends JFrame implements ProcessParametersVie
 		listModel.addElement("1st col");
 		listModel.addElement("2nd col");
 		listModel.addElement("3rd col");
+		setVisible(true);
 	}
 
 }
