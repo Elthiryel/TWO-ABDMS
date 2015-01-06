@@ -2,13 +2,13 @@ package pl.edu.agh.two.abdms.gui.components.classification;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import javax.swing.*;
+
+import com.sun.org.apache.bcel.internal.generic.CPInstruction;
 
 import pl.edu.agh.two.abdms.gui.ClassificationParameters;
 import pl.edu.agh.two.abdms.gui.ProcessParametersView;
@@ -24,6 +24,7 @@ public class ClassificationWindow extends JFrame implements ProcessParametersVie
 	private JTextField learningDataScopeTextField;
 	private JList<String> classColumnList;
 	private ClassificationParameters params;
+	 private Supplier<Stream<JComponent>> componentsStreamSupplier;
 	
 	public ClassificationWindow() {
 		initComponents();
@@ -39,6 +40,7 @@ public class ClassificationWindow extends JFrame implements ProcessParametersVie
 		listModel = new DefaultListModel<>();
 		columnList = new JList<>(listModel);
 		classColumnList = new JList<>(listModel);
+		componentsStreamSupplier = () -> Stream.of(neighboursAmountTextField, columnList, learningDataScopeTextField, classColumnList);
 	}
 
 	private void setProperties() {
@@ -80,9 +82,16 @@ public class ClassificationWindow extends JFrame implements ProcessParametersVie
 
 	private void setListeners() {
 		applyButton.addActionListener(e -> {
-			setValues();
+			if(componentsValuesAreValid()) {
+				setValues();
+				setVisible(false);
+			}
 		});
 
+	}
+	
+	private boolean componentsValuesAreValid() {
+		return componentsStreamSupplier.get().allMatch(c -> c.getInputVerifier().shouldYieldFocus(c));
 	}
 	
 	private void setValues() {
