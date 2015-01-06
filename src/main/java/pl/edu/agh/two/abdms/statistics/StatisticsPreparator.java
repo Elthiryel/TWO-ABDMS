@@ -3,13 +3,13 @@ package pl.edu.agh.two.abdms.statistics;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Set;
 
 import org.apache.commons.math3.stat.descriptive.moment.Skewness;
 import org.apache.commons.math3.stat.descriptive.rank.Median;
 
 import pl.edu.agh.two.abdms.data.loader.DataModel;
+import pl.edu.agh.two.abdms.data.util.DataUtil;
 
 public class StatisticsPreparator {
 	
@@ -23,7 +23,7 @@ public class StatisticsPreparator {
 	
 	public StatisticsPreparator(DataModel dataModel) {
 		this.dataModel = dataModel;
-		mapColumns();
+		columnTypeMap = DataUtil.mapColumns(dataModel);
 		createStatistics();
 	}
 	
@@ -72,26 +72,6 @@ public class StatisticsPreparator {
 			return uniqueValueCounts.get(column);
 		} else {
 			return null;
-		}
-	}
-	
-	private void mapColumns() {
-		columnTypeMap = new HashMap<String, ColumnType>();
-		for (String column : dataModel.getColumnValues()) {
-			int rowId = 0;
-			boolean found = false;
-			while (!found) {
-				try {
-					String value = dataModel.getValue(rowId, column);
-					ColumnType type = parseValue(value);
-					columnTypeMap.put(column, type);
-					found = true;
-				} catch (NoSuchElementException e) {
-					++rowId;
-				} catch (ArrayIndexOutOfBoundsException e) {
-					found = true;
-				}
-			}
 		}
 	}
 	
@@ -154,14 +134,6 @@ public class StatisticsPreparator {
 		}
 		uniqueValueCounts.put(column, valueSet.size());
 	}
-	
-	private ColumnType parseValue(String value) {
-		try {
-			Double.parseDouble(value);
-			return ColumnType.NUMBER;
-		} catch (Exception e) {
-			return ColumnType.STRING;
-		}
-	}
+
 	
 }
