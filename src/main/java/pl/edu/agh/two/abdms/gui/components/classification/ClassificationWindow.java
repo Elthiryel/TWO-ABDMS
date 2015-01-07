@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -115,12 +116,24 @@ public class ClassificationWindow extends JFrame implements ProcessParametersVie
 
 		  ConfigurationData currentDataConfiguration = ApplicationData.getCurrentDataConfiguration();
 		  if(currentDataConfiguration != null && currentDataConfiguration.getDataModel() != null) {
+              List<Map<String, String>> tableValues = currentDataConfiguration.getDataModel().getValues();
               Arrays.stream(currentDataConfiguration
                       .getDataModel()
                       .getColumnValues())
-                      .forEach(listModel::addElement);
+                      .forEach((columnName) -> {
+                          if (isColumnNumeric(columnName, tableValues))
+                              listModel.addElement(columnName);
+                      });
               setVisible(true);
           } else JOptionPane.showMessageDialog(this, "Please load data first", "Error", JOptionPane.ERROR_MESSAGE);
 	}
+
+    private boolean isColumnNumeric(String columnName, List<Map<String, String>> tableValues) {
+        return tableValues.stream().allMatch(row -> isElementNumeric(row.get(columnName)));
+    }
+
+    private boolean isElementNumeric(String s) {
+        return s.matches("[-+]?\\d*\\.?\\d+");
+    }
 
 }
