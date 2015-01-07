@@ -1,5 +1,11 @@
 package pl.edu.agh.two.abdms.gui.parameter_editor;
 
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Map;
+
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -13,28 +19,42 @@ import javax.swing.JTextPane;
 import javax.swing.border.TitledBorder;
 
 import pl.edu.agh.two.abdms.data.loader.DataModel;
+import pl.edu.agh.two.abdms.util.ActionCommand;
+import pl.edu.agh.two.abdms.util.ProcessState;
 
 public class ParameterEditorFrame extends JFrame {
+
+	private static final long serialVersionUID = -4240427884312513747L;
+	
 	private JTable dataModelTable;
 	private JTextField newValuePane;
+	private JTextPane findPane;
+	private JTextPane replacePane;
+	private JTextPane findWhatSubstringPane;
+	private JTextPane replaceToSubstringPane;
+	private JTabbedPane tabbedPane;
+	private OnActionCommandReceivedListener mCommandReceivedListener = new EmptyActionCommandListener();
 	
 	public ParameterEditorFrame(DataModel dataModel) {
 		
 		getContentPane().setLayout(
 				new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
-		dataModelTable = new JTable(DataModelExtractor.parseDataModel(dataModel),dataModel.getColumnValues());
+		dataModelTable = new ImmutableJTable(
+				DataModelExtractor.parseDataModel(dataModel),
+				dataModel.getColumnValues());
+		dataModelTable.setCellSelectionEnabled(true);
 		dataModelTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		JScrollPane scrollPane = new JScrollPane(dataModelTable);
 		scrollPane.setSize(100, 20);
 		getContentPane().add(scrollPane);
 
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		getContentPane().add(tabbedPane);
-
+		
 		JPanel valuePanel = new JPanel();
 		tabbedPane.addTab("Change value", null, valuePanel, null);
-		valuePanel.setLayout(new BoxLayout(valuePanel, BoxLayout.Y_AXIS));
+		valuePanel.setLayout(new GridBagLayout());
 		JLabel labelNewLabel = new JLabel("New value");
 		newValuePane = new JTextField();
 		newValuePane.setColumns(10);
@@ -43,33 +63,123 @@ public class ParameterEditorFrame extends JFrame {
 
 		JPanel patternPanel = new JPanel();
 		tabbedPane.addTab("Change by pattern", null, patternPanel, null);
-		patternPanel.setLayout(new BoxLayout(patternPanel, BoxLayout.Y_AXIS));
+		patternPanel.setLayout(new GridLayout(4,1));
 		patternPanel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING,
 				TitledBorder.TOP, null, null));
-		JLabel findLabel = new JLabel("Find what");
-		JTextPane findPane = new JTextPane();
-		JLabel replaceLabel = new JLabel("Replace to");
-		JTextPane replacePane = new JTextPane();
-		patternPanel.add(findLabel);
-		patternPanel.add(findPane);
-		patternPanel.add(replaceLabel);
-		patternPanel.add(replacePane);
+
+		JLabel findWhatOfPatternLabel = new JLabel("Find what");
+		JTextPane findWhatPatternPane = new JTextPane();
+		JLabel ReplaceToOfPatternLabel = new JLabel("Replace to");
+		JTextPane replaceToPatternPane = new JTextPane();
+		JScrollPane scrollPaneOfFindOfPatternPane = new JScrollPane(findWhatPatternPane);
+	    JScrollPane scrollPaneOfReplaceofPatternPane = new JScrollPane(replaceToPatternPane);
+		
+		patternPanel.add(findWhatOfPatternLabel);
+		patternPanel.add(scrollPaneOfFindOfPatternPane);
+		patternPanel.add(ReplaceToOfPatternLabel);
+		patternPanel.add(scrollPaneOfReplaceofPatternPane);
 
 		JPanel substringPanel = new JPanel();
 		tabbedPane.addTab("Substring on column", null, substringPanel, null);
-		substringPanel
-				.setLayout(new BoxLayout(substringPanel, BoxLayout.Y_AXIS));
-		JLabel indexFromLabel = new JLabel("Index from");
-		JTextPane indexFromPane = new JTextPane();
-		JLabel indexToLabel = new JLabel("Index to");
-		JTextPane indexToPane = new JTextPane();
-		substringPanel.add(indexFromLabel);
-		substringPanel.add(indexFromPane);
-		substringPanel.add(indexToLabel);
-		substringPanel.add(indexToPane);
-
+		substringPanel.setLayout(new GridLayout(4,1));
+		JLabel findWhatSubstringLabel = new JLabel("Find what");
+		findWhatSubstringPane = new JTextPane();
+		JLabel replaceToSubstringLabel = new JLabel("Replace to");
+		replaceToSubstringPane = new JTextPane();
+	    JScrollPane scrollPaneOfFindWhatOfSubstringPane = new JScrollPane(findWhatSubstringPane);
+	    JScrollPane scrollPaneOfReplaceToOfSubstringPane = new JScrollPane(replaceToSubstringPane);
+		
+		
+		substringPanel.add(findWhatSubstringLabel);
+		substringPanel.add(scrollPaneOfFindWhatOfSubstringPane);
+		substringPanel.add(replaceToSubstringLabel);
+		substringPanel.add(scrollPaneOfReplaceToOfSubstringPane);
 		
 		JButton changeButton = new JButton("Change");
+		changeButton.addActionListener(new ChangeButtonClickedActionListener());
 		getContentPane().add(changeButton);
+	}
+	
+	public final void setOnActionCommandReceivedListener(OnActionCommandReceivedListener listener) {
+		if (listener == null) {
+			mCommandReceivedListener = new EmptyActionCommandListener();
+			return;
+		}
+		
+		mCommandReceivedListener = listener;
+	}
+	
+	private class ChangeButtonClickedActionListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			ActionCommand requestedCommand = constructRequestedCommand();
+			mCommandReceivedListener.onActionCommandReceived(requestedCommand);
+			setVisible(false);
+			dispose();
+		}
+		
+		private ActionCommand constructRequestedCommand() {
+			
+			String primaryModificationValue = null;
+			String secondaryModificationValue = null;
+			DataPrepareOperationType operationType = null;
+			
+			switch(tabbedPane.getSelectedIndex()) {
+			case 0:
+				operationType = DataPrepareOperationType.CHANGE_PARTICULAR_VALUE;
+				primaryModificationValue = newValuePane.getText();
+				break;
+			case 1:
+				operationType = DataPrepareOperationType.CHANGE_BY_EQUAL_STRING;
+				primaryModificationValue = findPane.getText();
+				secondaryModificationValue = replacePane.getText();
+				break;
+			case 2:
+				operationType = DataPrepareOperationType.CHANGE_BY_CONTAINING_STRING;
+				primaryModificationValue = findWhatSubstringPane.getText();
+				secondaryModificationValue = replaceToSubstringPane.getText();
+				break;
+			}
+			
+			final String selectedColumnName = dataModelTable.getSelectedColumn() > 0 ?
+					(String) dataModelTable.getColumnName(dataModelTable.getSelectedColumn())
+					: null;
+			final int selectedCellRow = dataModelTable.getSelectedRow();
+
+			return new ReturnActionCommand(selectedCellRow, selectedColumnName,
+					operationType, primaryModificationValue, secondaryModificationValue);
+		}
+	}
+	
+	private static final class ReturnActionCommand implements ActionCommand {
+		
+		private final int mRow;
+		private final String mColumnName;
+		private final DataPrepareOperationType mOperationType;
+		private final String mPrimaryValue;
+		private final String mSecondaryValue;
+		
+		public ReturnActionCommand(int row, String columnName, DataPrepareOperationType operationType, 
+				String primaryValue, String secondaryValue) {
+			
+			mRow = row;
+			mColumnName = columnName;
+			mOperationType = operationType;
+			mPrimaryValue = primaryValue;
+			mSecondaryValue = secondaryValue;
+		}
+
+		@Override
+		public void performAction(ProcessState object) {
+			mOperationType.performOperation(object.getDataModel(), mRow,
+					mColumnName, mPrimaryValue, mSecondaryValue);
+		}
+	}
+	
+	private static final class EmptyActionCommandListener implements OnActionCommandReceivedListener {
+		@Override
+		public void onActionCommandReceived(ActionCommand actionCommand) {
+			//swallow
+		}
 	}
 }
