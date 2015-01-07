@@ -2,6 +2,7 @@ package pl.edu.agh.two.abdms;
 
 import java.util.List;
 
+import pl.edu.agh.two.abdms.gui.ClassificationParameters;
 import pl.edu.agh.two.abdms.gui.ProcessParameters;
 import pl.edu.agh.two.abdms.gui.parameter_editor.DataPrepareProcessParameters;
 import pl.edu.agh.two.abdms.util.ProcessState;
@@ -30,7 +31,9 @@ public class FlowExecutor {
     private void execute(ProcessParameters processParameter, ProcessState processState) {
     	if (processParameter instanceof DataPrepareProcessParameters) {
     		((DataPrepareProcessParameters) processParameter).execute(processState.getDataModel());
-    	}
+		} else if (processParameter instanceof ClassificationParameters) {
+			((ClassificationParameters) processParameter).execute(processState.getDataModel());
+		}
     }
     
     

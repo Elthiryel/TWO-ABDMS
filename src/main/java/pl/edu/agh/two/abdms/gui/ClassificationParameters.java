@@ -2,6 +2,13 @@ package pl.edu.agh.two.abdms.gui;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
+
+import com.google.common.collect.Lists;
+
+import pl.edu.agh.two.abdms.classification.ClassifierAgent;
+import pl.edu.agh.two.abdms.data.loader.DataModel;
+import pl.edu.agh.two.abdms.util.ProcessState;
 
 /**
  * Created by pawko on 2014-12-03.
@@ -38,5 +45,9 @@ public class ClassificationParameters implements ProcessParameters{
 	public void setClassColumn(String classColumn) {
 		this.classColumn = classColumn;
 	}
-
+	
+	public List<Object> execute(DataModel model) {
+		ClassifierAgent agent = new ClassifierAgent(neighboursAmount, model, Lists.newArrayList(choosenColumns), classColumn, learningDataScope);
+		return agent.classify(model.getValues());
+	}
 }
