@@ -1,6 +1,7 @@
 package pl.edu.agh.two.abdms.gui;
 
 import java.util.Collection;
+import java.util.Collections;
 
 /**
  * Created by pawko on 2014-12-03.
@@ -8,9 +9,9 @@ import java.util.Collection;
 public class ClassificationParameters implements ProcessParameters{
 
 
-	private Integer neighboursAmount;
-	private Double learningDataScope;
-	private Collection<String> choosenColumns;
+	private Integer neighboursAmount = 1;
+	private Double learningDataScope = 0.5;
+	private Collection<String> choosenColumns = Collections.emptyList();
 	private String classColumn;
 	
 	public Double getLearningDataScope() {
