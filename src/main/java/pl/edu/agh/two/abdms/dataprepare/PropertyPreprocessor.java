@@ -4,9 +4,10 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import pl.edu.agh.two.abdms.data.loader.DataModel;
 
+import java.io.Serializable;
 import java.util.Map;
 
-public class PropertyPreprocessor {
+public class PropertyPreprocessor implements Serializable {
     private DataModel dataModel;
     private final String propertyName;
 

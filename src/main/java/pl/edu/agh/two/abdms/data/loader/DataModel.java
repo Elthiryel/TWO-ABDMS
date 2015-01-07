@@ -1,11 +1,12 @@
 package pl.edu.agh.two.abdms.data.loader;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-public class DataModel {
+public class DataModel implements Serializable {
 	
 	private DataModel() {
 	}

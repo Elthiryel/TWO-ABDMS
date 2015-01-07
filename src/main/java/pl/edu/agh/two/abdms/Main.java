@@ -11,7 +11,6 @@ public class Main extends MicroBoot {
     public static void main(String[] args) {
         startAgents(args);
         new GuiLauncher().startGui();
-        AgentManager.getInstance().processData(dataModel, propertyAbsenceTolerancePolicy);
     }
 
     private static void startAgents(String[] args) {
