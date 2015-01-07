@@ -1,17 +1,16 @@
 package pl.edu.agh.two.abdms.gui.components.classification;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
+import pl.edu.agh.two.abdms.gui.ClassificationParameters;
+import pl.edu.agh.two.abdms.gui.ProcessParametersView;
+import pl.edu.agh.two.applicationdata.ApplicationData;
+import pl.edu.agh.two.applicationdata.ConfigurationData;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
-
-import javax.swing.*;
-
-import com.sun.org.apache.bcel.internal.generic.CPInstruction;
-
-import pl.edu.agh.two.abdms.gui.ClassificationParameters;
-import pl.edu.agh.two.abdms.gui.ProcessParametersView;
 
 public class ClassificationWindow extends JFrame implements ProcessParametersView<ClassificationParameters> {
 
@@ -25,7 +24,7 @@ public class ClassificationWindow extends JFrame implements ProcessParametersVie
 	private JList<String> classColumnList;
 	private ClassificationParameters params;
 	 private Supplier<Stream<JComponent>> componentsStreamSupplier;
-	
+
 	public ClassificationWindow() {
 		initComponents();
 		setProperties();
@@ -89,11 +88,11 @@ public class ClassificationWindow extends JFrame implements ProcessParametersVie
 		});
 
 	}
-	
+
 	private boolean componentsValuesAreValid() {
 		return componentsStreamSupplier.get().allMatch(c -> c.getInputVerifier().shouldYieldFocus(c));
 	}
-	
+
 	private void setValues() {
 		Integer neighbourAmount = Integer.valueOf(neighboursAmountTextField.getText());
 		Double learningDataScope = Double.valueOf(learningDataScopeTextField.getText());
@@ -104,7 +103,7 @@ public class ClassificationWindow extends JFrame implements ProcessParametersVie
 		params.setLearningDataScope(learningDataScope);
 		params.setNeighboursAmount(neighbourAmount);
 	}
-	
+
 	@Override
 	public void setEventListener(EventListener<ClassificationParameters> listener) {
 		this.listener = listener;
@@ -113,21 +112,15 @@ public class ClassificationWindow extends JFrame implements ProcessParametersVie
 	@Override
 	public void displayData(ClassificationParameters params) {
 		this.params = params;
-		/*
-		 * ConfigurationData currentDataConfiguration =
-		 * ApplicationData.getCurrentDataConfiguration();
-		 * if(currentDataConfiguration != null &&
-		 * currentDataConfiguration.getDataModel() != null) {
-		 * Arrays.stream(currentDataConfiguration
-		 * .getDataModel().getColumnValues()) .forEach( (element) ->
-		 * listModel.addElement(element)); setVisible(true); } else
-		 * JOptionPane.showMessageDialog(this, "Please load data first",
-		 * "Error", JOptionPane.ERROR_MESSAGE);
-		 */
-		listModel.addElement("1st col");
-		listModel.addElement("2nd col");
-		listModel.addElement("3rd col");
-		setVisible(true);
+
+		  ConfigurationData currentDataConfiguration = ApplicationData.getCurrentDataConfiguration();
+		  if(currentDataConfiguration != null && currentDataConfiguration.getDataModel() != null) {
+              Arrays.stream(currentDataConfiguration
+                      .getDataModel()
+                      .getColumnValues())
+                      .forEach(listModel::addElement);
+              setVisible(true);
+          } else JOptionPane.showMessageDialog(this, "Please load data first", "Error", JOptionPane.ERROR_MESSAGE);
 	}
 
 }
