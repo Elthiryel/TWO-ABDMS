@@ -1,11 +1,12 @@
 package pl.edu.agh.two.abdms;
 
+import java.util.List;
+
 import pl.edu.agh.two.abdms.gui.ProcessParameters;
+import pl.edu.agh.two.abdms.gui.parameter_editor.DataPrepareProcessParameters;
 import pl.edu.agh.two.abdms.util.ProcessState;
 import pl.edu.agh.two.applicationdata.ApplicationData;
 import pl.edu.agh.two.applicationdata.ConfigurationData;
-
-import java.util.List;
 
 public class FlowExecutor {
 
@@ -21,8 +22,18 @@ public class FlowExecutor {
     public void execute(List<ProcessParameters> processParameters) {
         processParameters.forEach(System.out::println);
         ProcessState processState = getProcessState();
+        for (ProcessParameters processParameter : processParameters) {
+        	execute(processParameter, processState);
+        }
     }
 
+    private void execute(ProcessParameters processParameter, ProcessState processState) {
+    	if (processParameter instanceof DataPrepareProcessParameters) {
+    		((DataPrepareProcessParameters) processParameter).execute(processState.getDataModel());
+    	}
+    }
+    
+    
     private ProcessState getProcessState() {
         ConfigurationData currentDataConfiguration = ApplicationData.getCurrentDataConfiguration();
         if (currentDataConfiguration == null) {
