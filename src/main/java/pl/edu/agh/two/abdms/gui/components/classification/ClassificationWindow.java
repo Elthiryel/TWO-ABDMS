@@ -7,6 +7,7 @@ import pl.edu.agh.two.applicationdata.ApplicationData;
 import pl.edu.agh.two.applicationdata.ConfigurationData;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -20,11 +21,12 @@ public class ClassificationWindow extends JFrame implements ProcessParametersVie
     private JButton applyButton;
     private JTextField neighboursAmountTextField;
     private JList<String> columnList;
-    private DefaultListModel<String> listModel;
+    private DefaultListModel<String> numericColumnsListModel;
     private JTextField learningDataScopeTextField;
     private JList<String> classColumnList;
     private ClassificationParameters params;
     private Supplier<Stream<JComponent>> componentsStreamSupplier;
+	private DefaultListModel<String> classColumnsListModel;
 
     public ClassificationWindow() {
         initComponents();
@@ -37,9 +39,10 @@ public class ClassificationWindow extends JFrame implements ProcessParametersVie
         applyButton = new JButton(APPLY_CAPTION);
         neighboursAmountTextField = new JTextField();
         learningDataScopeTextField = new JTextField();
-        listModel = new DefaultListModel<>();
-        columnList = new JList<>(listModel);
-        classColumnList = new JList<>(listModel);
+        numericColumnsListModel = new DefaultListModel<>();
+        classColumnsListModel = new DefaultListModel<>();
+        columnList = new JList<>(numericColumnsListModel);
+        classColumnList = new JList<>(classColumnsListModel);
         componentsStreamSupplier = () -> Stream.of(neighboursAmountTextField, columnList, learningDataScopeTextField,
                 classColumnList);
     }
@@ -133,7 +136,9 @@ public class ClassificationWindow extends JFrame implements ProcessParametersVie
         List<Map<String, String>> tableValues = model.getValues();
         Arrays.stream(model.getColumnValues()).forEach((columnName) -> {
             if (isColumnNumeric(columnName, tableValues))
-                listModel.addElement(columnName);
+                numericColumnsListModel.addElement(columnName);
+            else
+            	classColumnsListModel.addElement(columnName);
         });
     }
 
@@ -153,10 +158,10 @@ public class ClassificationWindow extends JFrame implements ProcessParametersVie
     }
 
     private void selectColumns(Collection<String> parametersColumns) {
-        int[] indices = Collections.list(listModel.elements())
+        int[] indices = Collections.list(numericColumnsListModel.elements())
                 .stream()
                 .filter(el -> parametersColumns.contains(el))
-                .mapToInt(col -> listModel.indexOf(col))
+                .mapToInt(col -> numericColumnsListModel.indexOf(col))
                 .toArray();
         columnList.setSelectedIndices(indices);
     }
