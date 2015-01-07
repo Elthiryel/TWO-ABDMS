@@ -1,14 +1,12 @@
 package pl.edu.agh.two.abdms.gui.statistics;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -19,7 +17,9 @@ import pl.edu.agh.two.abdms.statistics.StatisticsPreparator;
 
 public class StatisticsDialog extends JDialog {
 
-    private final DataModel dataModel;
+	private static final long serialVersionUID = 6095405502526039632L;
+	
+	private final DataModel dataModel;
     private JLabel loadingLabel;
     private BoxLayout layout;
 
@@ -42,6 +42,8 @@ public class StatisticsDialog extends JDialog {
     private void loadData() {
         new Thread() {
             public void run() {
+            	if (dataModel == null)
+            		return;
                 final StatisticsPreparator statisticsPreparator = new StatisticsPreparator(dataModel); // this may take long
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override

@@ -12,13 +12,15 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 public class NewConfigurationDialog extends JDialog {
-    private ConfigurationsController configurationsController = ConfigurationsController.getInstance();
+
+	private static final long serialVersionUID = -6702944861505221766L;
+
+	private ConfigurationsController configurationsController = ConfigurationsController.getInstance();
 
     private JButton uploadFileButton;
     private JTextField configurationName;
-    private JLabel uploadLabel = new JLabel();
     private JLabel configurationNameLabel = new JLabel("Configuration name:");
-    private JLabel errorLabel = new JLabel();
+    private JLabel infoLabel = new JLabel();
     private JButton confirmButton = new JButton("Continue");
     private File selectedFile;
 
@@ -30,7 +32,7 @@ public class NewConfigurationDialog extends JDialog {
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
         uploadFileButton = new JButton("Select file");
         configurationName = new JFormattedTextField();
-        errorLabel.setForeground(Color.red);
+        infoLabel.setText(" ");
         bindEvents();
         render();
         setModal(true);
@@ -38,12 +40,11 @@ public class NewConfigurationDialog extends JDialog {
     }
 
     private void render() {
-        mainPanel.add(uploadLabel);
         mainPanel.add(uploadFileButton);
         mainPanel.add(configurationNameLabel);
         mainPanel.add(configurationName);
         mainPanel.add(confirmButton);
-        mainPanel.add(errorLabel);
+        mainPanel.add(infoLabel);
     }
 
 
@@ -55,9 +56,11 @@ public class NewConfigurationDialog extends JDialog {
                 int status = fileChooser.showDialog(null, "Select file");
                 if (status == JFileChooser.APPROVE_OPTION) {
                     selectedFile = fileChooser.getSelectedFile();
-                    uploadLabel.setText("Selected: " + selectedFile.getName());
+                    infoLabel.setForeground(Color.BLACK);
+                    infoLabel.setText("Selected: " + selectedFile.getName());
                 } else {
-                    uploadLabel.setText("Failed to load this file.");
+                	infoLabel.setForeground(Color.RED);
+                    infoLabel.setText("Failed to load this file.");
                 }
             }
         });
@@ -70,7 +73,8 @@ public class NewConfigurationDialog extends JDialog {
                     configurationsController.addConfiguration(configuration);
                     NewConfigurationDialog.this.dispose();
                 } catch (ValidationException exception) {
-                    errorLabel.setText(exception.getMessage());
+                	infoLabel.setForeground(Color.RED);
+                    infoLabel.setText(exception.getMessage());
                 }
             }
         });
