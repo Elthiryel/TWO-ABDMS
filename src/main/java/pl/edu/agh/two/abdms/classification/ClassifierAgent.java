@@ -16,11 +16,13 @@ import pl.edu.agh.two.abdms.data.loader.DataModel;
 public class ClassifierAgent {
     
     private final Classifier classifier;
-    private final List<String> columns = null;
-    private final String classColumn = null;
+    private final List<String> columns;
+    private final String classColumn;
     
-    public ClassifierAgent(int n, DataModel data, double part) {
+    public ClassifierAgent(int n, DataModel data, List<String> columns, String classColumn, double part) {
         this.classifier = new KNearestNeighbors(n);
+        this.columns = columns;
+        this.classColumn = classColumn;
         
         process(data, part);
     }
