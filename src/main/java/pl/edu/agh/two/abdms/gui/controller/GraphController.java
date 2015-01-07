@@ -1,5 +1,7 @@
 package pl.edu.agh.two.abdms.gui.controller;
 
+import pl.edu.agh.two.abdms.FlowExecutor;
+import pl.edu.agh.two.abdms.gui.ProcessParameters;
 import pl.edu.agh.two.abdms.gui.components.graph.GraphView;
 import pl.edu.agh.two.abdms.gui.components.graph.GraphViewListener;
 import pl.edu.agh.two.abdms.gui.components.graph.VertexType;
@@ -14,9 +16,9 @@ public class GraphController implements GraphViewListener {
 
     private final GraphView graphView;
 
-	private ConfigurationWindowOperner configurationWindowOpener;
+    private ConfigurationWindowOperner configurationWindowOpener;
     private ProcessesGraph processesGraph;
-
+    private List<ProcessParameters> processParameters;
 
     public static GraphController get(GraphView graphView) {
         return new GraphController(graphView);
@@ -45,8 +47,8 @@ public class GraphController implements GraphViewListener {
     @Override
     public int verticesConnectedEvent(int sourceVertexId, int targetVertexId) {
         return processesGraph.generateIndex();
-
     }
+
     @Override
     public void removeElementsAction(List<Integer> elementsIds) {
         elementsIds.forEach(id -> tryRemoveElement(id));
@@ -55,14 +57,32 @@ public class GraphController implements GraphViewListener {
     @Override
     public List<pl.edu.agh.two.abdms.gui.ProcessParameters> getProcessVertices() throws ValidationException {
         return processesGraph.getProcessVertices(graphView.getProcessGraph());
-
     }
-    
 
-	@Override
-	public void showConfigurationWindow(Integer vertexId) {
-		configurationWindowOpener.openWindow(vertexId, processesGraph.getVertexParameters(vertexId));
-	}
+
+    @Override
+    public void showConfigurationWindow(Integer vertexId) {
+        configurationWindowOpener.openWindow(vertexId, processesGraph.getVertexParameters(vertexId));
+    }
+
+    @Override
+    public void runProcess() {
+        if (processParameters == null) {
+            throw new IllegalStateException("Process is not built");
+        }
+        System.out.println("Process RUN");
+        FlowExecutor.getInstance().execute(processParameters);
+    }
+
+
+    @Override
+    public void buildProcess() {
+        try {
+            processParameters = getProcessVertices();
+        } catch (ValidationException e) {
+            graphView.showError(e.getMessage());
+        }
+    }
 
     private void tryRemoveElement(Integer elementId) {
         try {
@@ -74,7 +94,6 @@ public class GraphController implements GraphViewListener {
             e.printStackTrace();
         }
     }
-
 
 
 }

@@ -15,4 +15,8 @@ public interface GraphViewListener {
     public List<pl.edu.agh.two.abdms.gui.ProcessParameters> getProcessVertices() throws ValidationException;
 
 	public void showConfigurationWindow(Integer vertexId);
+
+    void runProcess();
+
+    void buildProcess();
 }

@@ -25,7 +25,16 @@ public class GraphView {
         //graphMenu.getClustering().addActionListener(e -> listener.addVertexAction(VertexType.clustering));
         graphMenu.getPrepareData().addActionListener(e -> listener.addVertexAction(VertexType.prepareData));
         graphMenu.getRemoveSelected().addActionListener(e -> listener.removeElementsAction(graphPanel.getSelection()));
-        graphMenu.getBuild().addActionListener(e -> buildProcess());
+        graphMenu.getBuild().addActionListener(e -> listener.buildProcess());
+        graphMenu.getRunProcess().addActionListener(e -> runProcess());
+    }
+
+    private void runProcess() {
+        try {
+            listener.runProcess();
+        } catch (IllegalStateException e) {
+            showError(e.getMessage());
+        }
     }
 
     public void addVertex(int vertexId, String name) {
@@ -45,13 +54,9 @@ public class GraphView {
         graphPanel.setListener(listener);
     }
 
-    private void buildProcess() {
-        try {
-            List<ProcessParameters> processVertices = listener.getProcessVertices();
-            System.out.println("Build process here: " + processVertices);
-        } catch (ValidationException e) {
-            MessageDialog.error(e.getMessage());
-        }
+
+    public void showError(String message) {
+        MessageDialog.error(message);
     }
 
     public ProcessGraph getProcessGraph() {
