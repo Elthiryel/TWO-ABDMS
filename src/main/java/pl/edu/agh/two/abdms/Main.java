@@ -9,9 +9,9 @@ import pl.edu.agh.two.abdms.gui.GuiLauncher;
 public class Main extends MicroBoot {
 
     public static void main(String[] args) {
-        startAgents(args);
+        //startAgents(args);
         new GuiLauncher().startGui();
-        AgentManager.getInstance().processData(dataModel, propertyAbsenceTolerancePolicy);
+        //AgentManager.getInstance().processData(dataModel, propertyAbsenceTolerancePolicy);
     }
 
     private static void startAgents(String[] args) {
