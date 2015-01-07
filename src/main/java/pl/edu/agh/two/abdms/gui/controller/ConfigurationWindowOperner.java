@@ -21,7 +21,7 @@ public class ConfigurationWindowOperner {
 
         if (processParameters instanceof ClassificationParameters) {
             openClassificationWindow((ClassificationParameters) processParameters);
-        } else if (processParameters instanceof DataPrepareParameters) {
+        } else if (processParameters instanceof DataPrepareProcessParameters) {
         	openDataPrepareParametersWindow((DataPrepareProcessParameters) processParameters,
         			ApplicationData.getCurrentDataConfiguration().getDataModel());
         }
