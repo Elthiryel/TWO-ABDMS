@@ -32,7 +32,8 @@ public class FlowExecutor {
     	if (processParameter instanceof DataPrepareProcessParameters) {
     		((DataPrepareProcessParameters) processParameter).execute(processState.getDataModel());
 		} else if (processParameter instanceof ClassificationParameters) {
-			((ClassificationParameters) processParameter).execute(processState.getDataModel());
+			((ClassificationParameters) processParameter).execute(processState);
+			
 		}
     }
     

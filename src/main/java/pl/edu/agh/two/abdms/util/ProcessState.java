@@ -12,6 +12,7 @@ public class ProcessState {
 
     private final DataModel dataModel;
     private final List<ClassificationResult> classificationResultList = new ArrayList<>();
+	private List<Object> classificationResults;
 
     public ProcessState(DataModel dataModel) {
         this.dataModel = dataModel;
@@ -30,5 +31,13 @@ public class ProcessState {
         return classificationResultList;
     }
 
+	public void setClassificationResults(List<Object> classify) {
+		this.classificationResults = classify;
+	}
 
+
+	public List<Object> getClassificationResults() {
+		return classificationResults;
+	}
+	
 }

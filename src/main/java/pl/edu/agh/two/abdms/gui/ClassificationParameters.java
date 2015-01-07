@@ -46,8 +46,9 @@ public class ClassificationParameters implements ProcessParameters{
 		this.classColumn = classColumn;
 	}
 	
-	public List<Object> execute(DataModel model) {
-		ClassifierAgent agent = new ClassifierAgent(neighboursAmount, model, Lists.newArrayList(choosenColumns), classColumn, learningDataScope);
-		return agent.classify(model.getValues());
+	public void execute(ProcessState processState) {
+		DataModel dataModel = processState.getDataModel();
+		ClassifierAgent agent = new ClassifierAgent(neighboursAmount, dataModel, Lists.newArrayList(choosenColumns), classColumn, learningDataScope);
+		processState.setClassificationResults(agent.classify(dataModel.getValues()));
 	}
 }
