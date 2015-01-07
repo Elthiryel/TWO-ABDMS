@@ -5,6 +5,8 @@ import javax.swing.JFrame;
 import pl.edu.agh.two.abdms.gui.ClassificationParameters;
 import pl.edu.agh.two.abdms.gui.DataPrepareParameters;
 import pl.edu.agh.two.abdms.gui.ProcessParameters;
+import pl.edu.agh.two.abdms.gui.parameter_editor.DataPrepareProcessParameters;
+import pl.edu.agh.two.abdms.gui.parameter_editor.OnActionCommandReceivedListener;
 import pl.edu.agh.two.abdms.gui.parameter_editor.ParameterEditorFrame;
 
 public class ConfigurationWindowOperner {
@@ -19,7 +21,7 @@ public class ConfigurationWindowOperner {
         if (processParameters instanceof ClassificationParameters) {
             openClassificationWindow();
         } else if (processParameters instanceof DataPrepareParameters) {
-        	openDataPrepareParametersWindow();
+        	openDataPrepareParametersWindow((DataPrepareProcessParameters) processParameters);
         }
 
     }
@@ -28,8 +30,9 @@ public class ConfigurationWindowOperner {
     	
     }
 
-    private void openDataPrepareParametersWindow() {
-    	JFrame dataPrepareFrame = new ParameterEditorFrame(null);
+    private void openDataPrepareParametersWindow(DataPrepareProcessParameters processParameters) {
+    	ParameterEditorFrame dataPrepareFrame = new ParameterEditorFrame(null, 
+    			processParameters);
     	dataPrepareFrame.pack();
     	dataPrepareFrame.setVisible(true);
     }

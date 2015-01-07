@@ -9,13 +9,15 @@ public class DataPrepareProcessParameters implements ProcessParameters, Serializ
 
 	private static final long serialVersionUID = -5507700817112934154L;
 	
-	private final int mRowIndex;
-	private final String mColumnName;
-	private final String mPrimaryValue;
-	private final String mSecondaryValue;
-	private final DataPrepareOperationType mDataPrepareOperationType;
+	private int mRowIndex;
+	private String mColumnName;
+	private String mPrimaryValue;
+	private String mSecondaryValue;
+	private DataPrepareOperationType mDataPrepareOperationType;
 	
-	protected DataPrepareProcessParameters(int rowIndex, String columnName,
+	public DataPrepareProcessParameters(){}
+	
+	public void setParameters(int rowIndex, String columnName,
 			String primaryValue, String secondaryValue, 
 			DataPrepareOperationType operationType) {
 		mRowIndex = rowIndex;
