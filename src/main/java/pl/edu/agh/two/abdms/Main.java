@@ -16,7 +16,6 @@ public class Main extends MicroBoot {
     private static void startAgents(String[] args) {
         MicroBoot.main(args);
         try {
-            MicroRuntime.startAgent("MainAgent", "pl.edu.agh.two.abdms.agent.MainAgent", null);
             MicroRuntime.startAgent("MainAgent", "pl.edu.agh.two.abdms.agent.DataPreprocessorAgent", null);
         } catch (Exception e) {
             e.printStackTrace();

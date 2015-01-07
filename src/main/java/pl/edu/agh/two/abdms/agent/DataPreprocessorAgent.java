@@ -35,18 +35,6 @@ public class DataPreprocessorAgent extends Agent {
         System.out.println("DataPreprocessorAgent started");
     }
 
-//    public void setDataModel(DataModel dataModel) {
-//        dataPreprocessor = new DataPreprocessor(dataModel);
-//    }
-//
-//    public void setPropertyAbsenceTolerancePolicy(PropertyAbsenceTolerancePolicy propertyAbsenceTolerancePolicy) {
-//        dataPreprocessor.setPropertyAbsenceTolerancePolicy(propertyAbsenceTolerancePolicy);
-//    }
-//
-//    public PropertyPreprocessor on(String propertyName) {
-//        return dataPreprocessor.on(propertyName);
-//    }
-
     class DataPreprocessorCyclicBehaviour extends CyclicBehaviour {
         private Agent agent;
         private MessageTemplate template = MessageTemplate.MatchConversationId(MSG_TEMPLATE);
