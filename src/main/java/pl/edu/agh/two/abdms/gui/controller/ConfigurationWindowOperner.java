@@ -1,13 +1,10 @@
 package pl.edu.agh.two.abdms.gui.controller;
 
-import javax.swing.JFrame;
-
 import pl.edu.agh.two.abdms.gui.ClassificationParameters;
 import pl.edu.agh.two.abdms.gui.DataPrepareParameters;
 import pl.edu.agh.two.abdms.gui.ProcessParameters;
-
 import pl.edu.agh.two.abdms.gui.components.classification.ClassificationWindow;
-
+import pl.edu.agh.two.abdms.gui.parameter_editor.DataPrepareProcessParameters;
 import pl.edu.agh.two.abdms.gui.parameter_editor.ParameterEditorFrame;
 
 
@@ -23,7 +20,7 @@ public class ConfigurationWindowOperner {
         if (processParameters instanceof ClassificationParameters) {
             openClassificationWindow((ClassificationParameters) processParameters);
         } else if (processParameters instanceof DataPrepareParameters) {
-        	openDataPrepareParametersWindow();
+        	openDataPrepareParametersWindow((DataPrepareProcessParameters) processParameters);
         }
 
     }
@@ -32,8 +29,9 @@ public class ConfigurationWindowOperner {
     	new ClassificationWindow().displayData(params);
     }
 
-    private void openDataPrepareParametersWindow() {
-    	JFrame dataPrepareFrame = new ParameterEditorFrame(null);
+    private void openDataPrepareParametersWindow(DataPrepareProcessParameters processParameters) {
+    	ParameterEditorFrame dataPrepareFrame = new ParameterEditorFrame(null, 
+    			processParameters);
     	dataPrepareFrame.pack();
     	dataPrepareFrame.setVisible(true);
     }

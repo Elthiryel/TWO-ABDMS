@@ -4,7 +4,6 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Map;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -19,8 +18,6 @@ import javax.swing.JTextPane;
 import javax.swing.border.TitledBorder;
 
 import pl.edu.agh.two.abdms.data.loader.DataModel;
-import pl.edu.agh.two.abdms.util.ActionCommand;
-import pl.edu.agh.two.abdms.util.ProcessState;
 
 public class ParameterEditorFrame extends JFrame {
 
@@ -34,9 +31,12 @@ public class ParameterEditorFrame extends JFrame {
 	private JTextPane replaceToSubstringPane;
 	private JTabbedPane tabbedPane;
 	private OnActionCommandReceivedListener mCommandReceivedListener = new EmptyActionCommandListener();
+	private DataPrepareProcessParameters mProcessParameters;
 	
-	public ParameterEditorFrame(DataModel dataModel) {
+	public ParameterEditorFrame(DataModel dataModel, 
+			DataPrepareProcessParameters processParameters) {
 		
+		mProcessParameters = processParameters;
 		getContentPane().setLayout(
 				new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
@@ -112,13 +112,11 @@ public class ParameterEditorFrame extends JFrame {
 	private class ChangeButtonClickedActionListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			ActionCommand requestedCommand = constructRequestedCommand();
-			mCommandReceivedListener.onActionCommandReceived(requestedCommand);
-			setVisible(false);
-			dispose();
+			constructRequestedCommand(mProcessParameters);
 		}
 		
-		private ActionCommand constructRequestedCommand() {
+		private void constructRequestedCommand(
+				DataPrepareProcessParameters processParameters) {
 			
 			String primaryModificationValue = null;
 			String secondaryModificationValue = null;
@@ -146,40 +144,18 @@ public class ParameterEditorFrame extends JFrame {
 					: null;
 			final int selectedCellRow = dataModelTable.getSelectedRow();
 
-			return new ReturnActionCommand(selectedCellRow, selectedColumnName,
-					operationType, primaryModificationValue, secondaryModificationValue);
-		}
-	}
-	
-	private static final class ReturnActionCommand implements ActionCommand {
-		
-		private final int mRow;
-		private final String mColumnName;
-		private final DataPrepareOperationType mOperationType;
-		private final String mPrimaryValue;
-		private final String mSecondaryValue;
-		
-		public ReturnActionCommand(int row, String columnName, DataPrepareOperationType operationType, 
-				String primaryValue, String secondaryValue) {
-			
-			mRow = row;
-			mColumnName = columnName;
-			mOperationType = operationType;
-			mPrimaryValue = primaryValue;
-			mSecondaryValue = secondaryValue;
-		}
-
-		@Override
-		public void performAction(ProcessState object) {
-			mOperationType.performOperation(object.getDataModel(), mRow,
-					mColumnName, mPrimaryValue, mSecondaryValue);
+			processParameters.setParameters(selectedCellRow, selectedColumnName, 
+					primaryModificationValue, secondaryModificationValue, operationType);
 		}
 	}
 	
 	private static final class EmptyActionCommandListener implements OnActionCommandReceivedListener {
+
 		@Override
-		public void onActionCommandReceived(ActionCommand actionCommand) {
-			//swallow
+		public void onActionCommandReceived(
+				DataPrepareProcessParameters actionCommand) {
+			// TODO Auto-generated method stub
+			
 		}
 	}
 }
